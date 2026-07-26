@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UIUX Principles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAFAFF;
+    --ink: #1A1A2E;
+    --ink-soft: #55536E;
+    --paper: #FFFFFF;
+    --line: #E7E5F5;
+
+    --laws: #FF6B6B;      --laws-tint: #FFEDED;      --laws-dark:#B23A3A;
+    --mech: #06B6A4;      --mech-tint: #E4FBF8;      --mech-dark:#0A7F72;
+    --vis: #F5A524;       --vis-tint: #FFF5E0;       --vis-dark:#9C6B0E;
+    --beh: #8B5CF6;       --beh-tint: #F2ECFF;       --beh-dark:#5B32B8;
+    --strat: #3B82F6;     --strat-tint: #EAF1FF;     --strat-dark:#1E4FA3;
+    --access: #22C55E;    --access-tint: #E9FBEF;    --access-dark:#15803D;
+
+    --shadow: 0 2px 0 rgba(26,26,46,0.9);
+    --shadow-lg: 0 8px 0 rgba(26,26,46,0.9);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 8% 8%, rgba(255,107,107,0.08) 0, transparent 40%),
+      radial-gradient(circle at 92% 15%, rgba(59,130,246,0.08) 0, transparent 40%),
+      radial-gradient(circle at 50% 95%, rgba(139,92,246,0.07) 0, transparent 45%),
+      var(--bg);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom: 60px;
+  }
+  h1,h2,h3,.display{ font-family:'Fredoka', sans-serif; font-weight:600; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  button{ font-family: inherit; }
+
+  header{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 12px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .brand svg{ flex-shrink:0; transition: transform .25s ease; }
+  .brand:hover svg{ transform: rotate(-8deg) scale(1.05); }
+  .brand-text h1{ font-size: 28px; margin:0; letter-spacing:-0.02em; }
+  .brand-text p{ margin:2px 0 0; color:var(--ink-soft); font-size:13.5px; }
+
+  .squint-btn{
+    display:flex; align-items:center; gap:8px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    box-shadow: var(--shadow);
+    transition: transform .12s ease;
+    color: var(--ink);
+  }
+  .squint-btn:active{ transform: translateY(2px); box-shadow:none; }
+  .squint-btn.on{ background: var(--beh); color:white; }
+
+  .tabbar{
+    max-width:1080px; margin: 18px auto 0; padding: 0 24px;
+    display:flex; gap:10px;
+  }
+  .tab{
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px;
+    padding: 12px 22px; border-radius: 14px 14px 0 0;
+    border: 2px solid var(--ink); border-bottom:none;
+    background: var(--line);
+    color: var(--ink-soft);
+    cursor:pointer;
+    position:relative; top:2px;
+  }
+  .tab.active{ background: var(--paper); color:var(--ink); top:0; }
+  main{
+    max-width:1080px; margin: 0 auto; padding: 0 24px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 0 18px 18px 18px;
+    min-height: 400px;
+    padding-top:26px;
+  }
+
+  .filter-block{ margin-bottom: 14px; }
+  .filter-block-label{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:.07em; margin: 0 0 6px; display:flex; align-items:center; gap:6px;
+  }
+  .filter-block-label .hint{ font-weight:500; text-transform:none; letter-spacing:0; opacity:.75; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; }
+
+  .segmented{
+    display:inline-flex; border:2px solid var(--ink); border-radius:12px; overflow:hidden;
+    box-shadow: var(--shadow);
+  }
+  .segment{
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px;
+    padding:9px 16px; cursor:pointer; background:var(--paper); color:var(--ink);
+    border:none; border-right:2px solid var(--ink); display:flex; align-items:center; gap:6px;
+    transition: background .1s ease;
+  }
+  .segment:last-child{ border-right:none; }
+  .segment .count{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:11px; opacity:.6; }
+  .segment[data-active="true"]{ background:var(--ink); color:white; }
+  .segment[data-active="true"] .count{ opacity:.85; }
+  .segment:hover:not([data-active="true"]){ background: var(--bg); }
+
+  .reset-chip{
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:12.5px;
+    color: var(--laws-dark); background: var(--laws-tint); border:1.5px solid var(--laws);
+    border-radius:999px; padding:7px 13px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;
+    margin-left:10px;
+  }
+  .reset-chip:hover{ filter:brightness(0.97); }
+
+  .lib-controls{ display:flex; align-items:center; margin-bottom:8px; }
+  .lib-controls.pill-row{
+    gap:8px; overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px;
+    scrollbar-width: thin;
+  }
+  .search-wrap{ position:relative; flex: 1 1 260px; }
+  .search-wrap input{
+    width:100%; padding: 13px 16px 13px 42px; border-radius: 12px;
+    border: 2px solid var(--line); font-size:15px; font-family:inherit;
+    background: var(--bg);
+  }
+  .search-wrap input:focus{ outline:none; border-color:var(--ink); }
+  .search-wrap svg{ position:absolute; left:14px; top:50%; transform:translateY(-50%); }
+
+  .pill{
+    display:flex; align-items:center; gap:6px; flex-shrink:0;
+    border:2px solid var(--ink); border-radius:999px; padding:8px 13px;
+    font-size:12.5px; font-weight:600; cursor:pointer; background:var(--paper); color:var(--ink);
+    font-family:'Fredoka',sans-serif;
+    white-space:nowrap;
+    transition: transform .1s ease;
+  }
+  .pill:hover{ transform: translateY(-1px); }
+  .pill .count{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:11px; opacity:.65; }
+  .pill[data-active="true"]{ color:white; }
+  .pill[data-active="true"] .count{ opacity:.85; }
+  .pill[data-cat="laws"][data-active="true"]{ background:var(--laws); }
+  .pill[data-cat="mech"][data-active="true"]{ background:var(--mech); }
+  .pill[data-cat="vis"][data-active="true"]{ background:var(--vis); }
+  .pill[data-cat="beh"][data-active="true"]{ background:var(--beh); }
+  .pill[data-cat="strat"][data-active="true"]{ background:var(--strat); }
+  .pill[data-cat="access"][data-active="true"]{ background:var(--access); }
+  .pill[data-cat="all"][data-active="true"]{ background:var(--ink); }
+
+
+  .squint-hint{ font-size:12.5px; color: var(--ink-soft); margin: 4px 0 20px; font-style:italic; }
+  .result-count{ font-size:12.5px; color:var(--ink-soft); margin: 0 0 14px; font-weight:600; }
+
+  .grid{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap:16px; padding-bottom: 30px;
+  }
+  .card{
+    border-radius:16px; border:2px solid var(--ink); padding:18px;
+    display:flex; flex-direction:column; gap:10px;
+    box-shadow: var(--shadow);
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+    min-height: 168px;
+  }
+  .card:hover{ transform: translate(-2px,-2px); box-shadow: 5px 6px 0 rgba(26,26,46,0.9); }
+  .card:focus-visible{ outline: 3px solid var(--ink); outline-offset:2px; }
+  .card[data-cat="laws"]{ background: var(--laws-tint); }
+  .card[data-cat="mech"]{ background: var(--mech-tint); }
+  .card[data-cat="vis"]{ background: var(--vis-tint); }
+  .card[data-cat="beh"]{ background: var(--beh-tint); }
+  .card[data-cat="strat"]{ background: var(--strat-tint); }
+  .card[data-cat="access"]{ background: var(--access-tint); }
+
+  .cat-row{ display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .cat-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.06em;
+    padding:4px 9px; border-radius:6px; display:flex; align-items:center; gap:5px;
+    background: rgba(255,255,255,0.65); border:1.5px solid rgba(26,26,46,0.22);
+  }
+  .card[data-cat="laws"] .cat-tag{ color:var(--laws-dark); }
+  .card[data-cat="mech"] .cat-tag{ color:var(--mech-dark); }
+  .card[data-cat="vis"] .cat-tag{ color:var(--vis-dark); }
+  .card[data-cat="beh"] .cat-tag{ color:var(--beh-dark); }
+  .card[data-cat="strat"] .cat-tag{ color:var(--strat-dark); }
+  .card[data-cat="access"] .cat-tag{ color:var(--access-dark); }
+
+  .platform-badge{
+    font-size:10.5px; font-weight:700; font-family:'JetBrains Mono',monospace;
+    padding:3px 8px; border-radius:6px; background: rgba(26,26,46,0.08); color:var(--ink-soft);
+    display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
+  }
+
+  .card h3{ font-size:18px; margin:0; line-height:1.28; }
+  .card .hook{ font-size:13px; color: rgba(26,26,46,0.72); line-height:1.45; margin:0; flex-grow:1; }
+  .explore-row{ display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; font-family:'Fredoka',sans-serif; opacity:.75; margin-top:auto; }
+  .explore-row svg{ transition: transform .15s ease; }
+  .card:hover .explore-row svg{ transform: translateX(3px); }
+
+  .squinting .grid{ filter: blur(6px); transition: filter .4s ease; }
+  .squinting .card:hover{ filter: blur(0); }
+
+  .empty-state{ text-align:center; padding: 50px 20px; color:var(--ink-soft); }
+
+  .modal-overlay{
+    position:fixed; inset:0; background: rgba(26,26,46,0.55);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding: 5vh 20px; z-index:100; overflow-y:auto;
+    animation: fadeIn .15s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .modal{
+    background: var(--paper); border:2px solid var(--ink); border-radius:20px;
+    max-width: 680px; width:100%; padding: 30px 30px 26px;
+    box-shadow: var(--shadow-lg);
+    animation: popIn .18s cubic-bezier(.3,.4,.3,1.3);
+  }
+  @keyframes popIn{ from{ transform:translateY(10px) scale(.98); opacity:0;} to{ transform:none; opacity:1;} }
+  .modal-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:6px;}
+  .modal-close{
+    background:var(--line); border:2px solid var(--ink); border-radius:10px;
+    width:36px; height:36px; font-size:16px; cursor:pointer; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{ background:var(--laws); color:white; }
+  .modal h2{ font-size: 26px; margin: 4px 0 4px; line-height:1.2; }
+  .modal .modal-hook{ font-size:14.5px; color:var(--ink-soft); font-style:italic; margin: 0 0 20px; }
+
+  .section-label{
+    display:flex; align-items:center; gap:7px;
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:13.5px;
+    text-transform:uppercase; letter-spacing:.03em; margin: 20px 0 8px;
+    color: var(--ink);
+  }
+  .section-label:first-of-type{ margin-top:4px; }
+  .modal p.body-text{ font-size:15px; line-height:1.62; margin:0; color:var(--ink); }
+  .modal p.body-text.small{ font-size:13.5px; line-height:1.55; }
+
+  .points-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .points-list li{ font-size:14.5px; line-height:1.55; }
+  .points-list .point-intro{
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px;
+    color: var(--ink); margin: 2px 0 -2px;
+  }
+  .points-list .point-plain{
+    position:relative; padding-left:20px;
+  }
+  .points-list .point-plain::before{
+    content:"—"; position:absolute; left:0; top:0; color: var(--ink-soft); font-weight:600;
+  }
+  .points-list .point-term{
+    background: var(--bg); border:1.5px solid var(--line); border-radius:10px;
+    padding:10px 14px; list-style:none;
+  }
+  .points-list .point-term .point-term-label{
+    display:block; font-family:'Fredoka',sans-serif; font-weight:600; font-size:13.5px;
+    margin-bottom:2px; color: var(--ink);
+  }
+  .modal[data-cat="laws"] .point-term .point-term-label{ color: var(--laws-dark); }
+  .modal[data-cat="mech"] .point-term .point-term-label{ color: var(--mech-dark); }
+  .modal[data-cat="vis"] .point-term .point-term-label{ color: var(--vis-dark); }
+  .modal[data-cat="beh"] .point-term .point-term-label{ color: var(--beh-dark); }
+  .modal[data-cat="strat"] .point-term .point-term-label{ color: var(--strat-dark); }
+  .modal[data-cat="access"] .point-term .point-term-label{ color: var(--access-dark); }
+
+  .section-label.small{ font-size:12px; margin: 0 0 6px; }
+  .two-col{
+    display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin: 18px 0 4px;
+  }
+  .two-col-item{
+    background: var(--bg); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px;
+  }
+  @media (max-width: 560px){
+    .two-col{ grid-template-columns: 1fr; }
+  }
+  .example-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .example-list li{
+    font-size:14px; line-height:1.55; padding:11px 14px; border-radius:10px;
+    background: var(--bg); border:1.5px solid var(--line); position:relative; padding-left:32px;
+  }
+  .example-list li::before{ content:"✓"; position:absolute; left:11px; top:11px; font-weight:700; color: var(--mech-dark); }
+  .watch-box{
+    background: var(--laws-tint); border:1.5px solid rgba(178,58,58,0.35);
+    border-radius:10px; padding:12px 14px; font-size:13.5px; line-height:1.55;
+  }
+  .watch-box strong{ color: var(--laws-dark); }
+
+  .scenario-wrap{ padding-bottom: 34px; }
+  .progress-row{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+  .progress-track{ flex:1; height:10px; background:var(--line); border-radius:6px; overflow:hidden; border:2px solid var(--ink);}
+  .progress-fill{ height:100%; background: var(--beh); transition: width .35s ease; }
+  .score-chip{
+    font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px;
+    border:2px solid var(--ink); border-radius:8px; padding:5px 10px; white-space:nowrap;
+  }
+
+  .scenario-card{
+    border:2px solid var(--ink); border-radius:18px; padding:26px;
+    background: linear-gradient(180deg, #fff, #FCFCFF);
+    box-shadow: var(--shadow-lg);
+  }
+  .scenario-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:700; color: var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;}
+  .scenario-text{ font-size:18px; line-height:1.5; margin: 0 0 22px; }
+  .options{ display:grid; gap:10px; }
+  .option-btn{
+    text-align:left; padding:14px 16px; border-radius:12px; border:2px solid var(--ink);
+    background:var(--paper); font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; font-size:14.5px;
+    cursor:pointer; transition: transform .1s ease;
+  }
+  .option-btn:hover:not([disabled]){ transform: translateX(3px); }
+  .option-btn[disabled]{ cursor:default; }
+  .option-btn.incorrect{ background:#FFE3E3; border-color:#D14343; }
+  .option-btn.reveal-correct{ background:#DFF6E6; border-color:#2F9E52; }
+
+  .feedback-box{
+    margin-top:18px; padding:16px 18px; border-radius:12px; border:2px dashed var(--ink);
+    font-size:13.5px; line-height:1.5; background: var(--strat-tint);
+  }
+  .feedback-box strong{ font-family:'Fredoka',sans-serif; }
+
+  .next-btn{
+    margin-top:18px; font-family:'Fredoka',sans-serif; font-weight:600; font-size:14.5px;
+    background: var(--ink); color:white; border:2px solid var(--ink); border-radius:12px;
+    padding:12px 20px; cursor:pointer; box-shadow: var(--shadow);
+  }
+  .next-btn:active{ transform: translateY(2px); box-shadow:none; }
+
+  .results{ text-align:center; padding: 30px 10px 10px; }
+  .results h2{ font-size:26px; margin-bottom:6px;}
+  .big-score{ font-family:'Fredoka',sans-serif; font-size:56px; margin: 10px 0; }
+  .breakdown{ display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin: 22px 0; text-align:left; }
+  .bd-item{ border:2px solid var(--ink); border-radius:12px; padding:12px 14px; }
+  .bd-item .n{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:15px;}
+  .restart-btn{
+    font-family:'Fredoka',sans-serif; font-weight:600; background:var(--beh); color:white;
+    border:2px solid var(--ink); border-radius:12px; padding:13px 24px; cursor:pointer;
+    box-shadow: var(--shadow); font-size:15px;
+  }
+  .restart-btn:active{ transform: translateY(2px); box-shadow:none; }
+
+  .missed-list{ text-align:left; margin-top:18px; }
+  .missed-item{ border-left:4px solid var(--laws); background:var(--laws-tint); border-radius:8px; padding:10px 14px; margin-bottom:8px; font-size:13px; }
+
+  footer{ text-align:center; color:var(--ink-soft); font-size:12px; margin-top:30px; }
+
+  @media (max-width: 600px){
+    .brand-text h1{ font-size:22px; }
+    .modal{ padding:22px 20px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+      <circle cx="21" cy="21" r="16" fill="#FFB627" stroke="#1A1A2E" stroke-width="2.5"/>
+      <circle cx="16" cy="19" r="2.6" fill="#1A1A2E"/>
+      <circle cx="26" cy="19" r="2.6" fill="#1A1A2E"/>
+      <path d="M15 27c2.5 2.5 8 2.5 11 0" stroke="#1A1A2E" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <rect x="31" y="31" width="14" height="5" rx="2.5" transform="rotate(45 31 31)" fill="#1A1A2E"/>
+    </svg>
+    <div class="brand-text">
+      <h1>UIUX Principles</h1>
+      <p>Laws, mechanics &amp; psychology — for every kind of Product Manager</p>
+    </div>
+  </div>
+  <button class="squint-btn" id="squintBtn">
+    <span id="squintIcon">👀</span> <span id="squintLabel">Squint Test</span>
+  </button>
+</header>
+
+<div class="tabbar">
+  <div class="tab active" data-view="library">📚 Reference Library</div>
+  <div class="tab" data-view="scenarios">🎯 Scenario Practice</div>
+</div>
+
+<main id="main"></main>
+
+<footer>Built from your UI/UX source notes — click any card to open its full explanation, or try Squint Test mode to feel the visual-hierarchy principle in action.</footer>
+
+<div id="modalRoot"></div>
+
+<script>
+const CATS = {
+  laws:  { label: "Fundamental Laws",      icon: "⚖️" },
+  mech:  { label: "Interaction Mechanics",  icon: "⚙️" },
+  vis:   { label: "Visual & Cognitive",     icon: "👁️" },
+  beh:   { label: "Behavioral Psychology",  icon: "🧠" },
+  strat: { label: "Strategic Frameworks",   icon: "🧭" },
+  access:{ label: "Accessibility",          icon: "♿" },
+};
+
+const PLATFORMS = {
+  both:   { label: "Web + Mobile", icon: "🔁" },
+  web:    { label: "Web",          icon: "🌐" },
+  mobile: { label: "Mobile",       icon: "📱" },
+};
+
+const PRINCIPLES = [
+  {cat:"laws", platform:"both", name:"Don't Make Me Think", hook:"Self-evidence beats explanation.",
+    def:"The overriding law of usability: a screen or flow should be obvious enough that a user of average ability can figure out what it is and how to use it without expending real mental effort. Every unresolved question in a user's head, is that a button, where am I, what happens if I click this, quietly drains their patience and increases the chance they abandon the task before finishing it.",
+    why:"Every moment a user spends puzzling over an interface is a moment of doubt — and doubt compounds. Each unresolved question quietly taxes their patience, and enough of them add up to task abandonment, even if any single confusion seemed minor.",
+    points:[{"text":"A screen should be self-evident — obvious enough that an average user needs zero real effort to understand what it is and how to use it."},{"text":"Every unresolved question — is that a button? what happens if I click this? — quietly drains patience."},{"text":"Enough small doubts compound into task abandonment, even when no single confusion felt like a big deal."}],
+    when:"Apply it whenever you're reviewing any screen a first-time or occasional user will land on, especially entry points like onboarding, checkout, or a new feature's first use, where there's no accumulated familiarity to fall back on.",
+    how:"Read your own screen as a total stranger would: for every element, ask 'would an average person instantly know what this is and what happens if they interact with it?' If you have to explain it out loud, rewrite the label, the layout, or the copy until you don't have to.",
+    example:[
+      "A checkout button labeled 'Place Order — $42.00' beats a vague 'Continue', because the user never has to guess the consequence of clicking.",
+      "Amazon's 'Buy Now' vs. 'Add to Cart' are visually distinct precisely because they lead to very different outcomes — the labels remove any doubt."
+    ],
+    watch:"Don't confuse this with 'dumbing down' a product — it's about removing unnecessary ambiguity, not removing genuine functionality or depth."},
+
+  {cat:"laws", platform:"both", name:"Clarity Trumps Consistency", hook:"Break the pattern when it helps.",
+    def:"Consistency is a good default because it lets people transfer what they've learned from one screen to the next. But when strict consistency would make something confusing, a design should prioritize clarity instead, even at the cost of matching the rest of the system exactly.",
+    why:"Rigid consistency exists to reduce learning cost, but it becomes counterproductive the moment it forces an important action to look just like everything else and get lost in the crowd.",
+    points:[{"text":"Consistency is the default — it lets people reuse what they've already learned elsewhere in your product."},{"text":"But when strict consistency would create real confusion, prioritize clarity instead — even at the cost of breaking the pattern."}],
+    when:"Reach for this only when a specific element carries outsized consequence or risk — a destructive action, an unusually important choice — and your existing design system would otherwise camouflage it.",
+    how:"Ask 'does deviating here make the user safer or faster, or am I just breaking pattern for novelty's sake?' If it's the former, deviate deliberately and document why, so the exception doesn't quietly become permission to break consistency everywhere.",
+    example:[
+      "Using a red icon for 'delete' even though the rest of your icon system is neutral-colored, because the color instantly signals danger.",
+      "A 'Save & Exit' button that looks different from every other secondary button on the page, because it triggers an unusually consequential action."
+    ],
+    watch:"This is an exception, not a license — inconsistency should be rare and deliberate, or your design system stops meaning anything."},
+
+  {cat:"laws", platform:"both", name:"Krug's Second Law (Mindless Clicks)", hook:"Clicks are free if they're obvious.",
+    def:"The number of clicks it takes to reach a goal matters far less than whether each individual click is an unambiguous, mindless choice. A 5-click path where every step is obvious beats a 2-click path where the user has to stop and think at each one.",
+    why:"Teams often optimize the wrong metric — minimizing click count — when what actually drives abandonment is decision difficulty at each step, not the number of steps itself.",
+    points:[{"text":"Click count matters far less than whether each individual click is an obvious, mindless choice."},{"text":"A 5-click path where every step is obvious beats a 2-click path that makes you stop and think."}],
+    when:"Use this when deciding whether to break a complex task into multiple simple screens versus cramming it onto one dense screen, especially during checkout flows, onboarding, or multi-field forms.",
+    how:"For each proposed click, ask 'is this an obvious, low-stakes choice, or does it require the user to stop and think?' Favor more obvious clicks over fewer ambiguous ones, and test with someone unfamiliar with the flow to see where they hesitate.",
+    example:[
+      "A 3-step signup wizard with clearly labeled steps outperforms a single cramped page packed with 12 ambiguous fields.",
+      "IKEA's website funnels you through category, then subcategory, then product with obvious labels at every step, rather than one giant confusing filter panel."
+    ],
+    watch:"This counters the common myth that 'fewer clicks always wins' — click count is the wrong metric; decision difficulty is the right one."},
+
+  {cat:"laws", platform:"both", name:"Fitts's Law", hook:"Distance + size = speed.",
+    def:"The time it takes to move a pointer or thumb to a target is a function of the distance to that target and its size — closer and bigger means faster and more accurate. Screen edges and corners act as effectively infinite targets, since the cursor physically cannot overshoot past them.",
+    why:"Interaction speed and error rate are physically constrained by geometry — a target's size and its distance from the user's current point of focus directly determine how quickly and accurately it can be reached.",
+    points:[{"text":"Reaching a target is a function of two things: how far away it is, and how big it is."},{"text":"Screen edges and corners act as effectively 'infinite' targets — the cursor physically can't overshoot past them."}],
+    when:"Apply it when placing or sizing any interactive element a user will reach for repeatedly or urgently — primary buttons, frequently used icons, and anything on a touchscreen where fingers are less precise than a mouse cursor.",
+    how:"Make frequent or high-value targets large and close to where attention already sits; push edges and corners to their advantage since they're effectively infinite; and give small icons generous invisible tap-target padding rather than shrinking the interaction zone to match the visible icon.",
+    example:[
+      "macOS puts window controls and the menu bar right at the screen's edge — you can't overshoot past the boundary, so they're always easy to hit.",
+      "Mobile apps enlarge the tap target around a small icon, say 44 by 44 pixels, even if the icon itself looks smaller, to make it easier to hit accurately."
+    ],
+    watch:"Applies to distance from the user's current focus, not just raw pixel size — a huge button far from where the eye or cursor already is can still feel slow to reach."},
+
+  {cat:"laws", platform:"both", name:"Hick's Law", hook:"More choices, slower decisions.",
+    def:"The time it takes someone to make a decision increases with the number and complexity of the choices in front of them. Reducing the visible option count, or organizing options into categories, lets users eliminate large chunks of the decision at once instead of scanning every option individually.",
+    why:"Decision-making time doesn't scale linearly with options — every additional choice adds real cognitive overhead, and unstructured long lists are one of the most common silent sources of task abandonment.",
+    points:[{"text":"Decision time increases with the number and complexity of choices in front of someone."},{"text":"Reducing visible options, or grouping them into categories, lets people eliminate large chunks at once instead of scanning one by one."}],
+    when:"Use it when a screen presents many options at once — dropdowns, navigation menus, filter panels, or any list a user must scan to pick one item.",
+    how:"Reduce the number of visible options where possible, or bucket them into clear categories so users can eliminate large chunks at once instead of scanning one by one; surface only the most common choices by default and let advanced options live one layer deeper.",
+    example:[
+      "A 50-country dropdown feels instant once it's grouped by continent instead of presented as one giant alphabetical list.",
+      "Restaurant menus with a handful of curated chef's picks at the top reduce decision fatigue compared to a 60-item unstructured list."
+    ],
+    watch:"Don't over-apply this to remove genuinely useful options — advanced or power users often need the full choice set available somewhere, just not on the default path."},
+
+  {cat:"laws", platform:"both", name:"Tesler's Law (Conservation of Complexity)", hook:"Complexity doesn't vanish — it moves.",
+    def:"Every product has a certain amount of complexity that is inherent to the problem it solves and simply cannot be eliminated. The designer's real job isn't to remove that complexity, but to decide who absorbs it, and to shift as much of it as possible from the user onto the software itself.",
+    why:"Because complexity can't be deleted, only relocated, ignoring this law usually means a team unconsciously dumps unnecessary complexity onto the user simply because handling it in software would take more engineering time.",
+    points:[{"text":"Every product carries some complexity that's inherent to the problem it solves — it can't be removed, only relocated."},{"text":"The designer's real job is to decide who absorbs that complexity, and shift as much of it as possible from the user onto the software."}],
+    when:"Apply it during any workflow or form design decision where the system already has information that could spare the user a manual step — data entry, configuration, or repetitive multi-field input.",
+    how:"For every manual step you ask a user to do, ask 'could the software infer, pre-fill, or automate this instead?' If yes, weigh the added engineering cost against the ongoing user cost it removes — often it's worth it, especially for high-frequency actions.",
+    example:[
+      "Auto-detecting a credit card type, Visa, Amex, or Mastercard, from its number instead of making the user select it manually.",
+      "A tax filing app that pre-fills known figures from a W-2 upload rather than asking the user to type every field by hand."
+    ],
+    watch:"Shifting complexity to the software usually means more engineering effort behind the scenes — this principle has real cost trade-offs, not just design ones."},
+
+  {cat:"laws", platform:"both", name:"Poka-Yoke (Error-Proofing)", hook:"Design so mistakes can't happen.",
+    def:"Systems should be designed to prevent human error before it happens, and where prevention isn't possible, to make the error easy to spot and undo. This borrows directly from manufacturing, where physical jigs are shaped so a part can only be assembled the correct way.",
+    why:"Preventing an error costs far less, in trust, support tickets, and lost data, than fixing one after the fact, and some errors (like accidental deletion) simply can't be fully undone.",
+    points:[{"text":"Prevent human error before it happens — or, at minimum, make mistakes easy to spot and undo."},{"text":"Borrowed from manufacturing, where a physical jig is shaped so a part can only be assembled the one correct way."}],
+    when:"Apply it to any irreversible, destructive, or high-consequence action — deleting data, submitting a payment, sending something publicly — where a single accidental click causes real harm.",
+    how:"Add friction proportional to the action's risk: confirmation dialogs, typed confirmation phrases, disabled states until preconditions are met, or an undo window after the fact. Reserve heavier guards for genuinely risky actions so you don't over-friction routine ones.",
+    example:[
+      "A 'Delete Account' action that stays disabled until the user types the word DELETE, preventing an accidental single click from destroying data.",
+      "A form that disables the 'Submit' button and shows an inline warning until every required field is validly filled."
+    ],
+    watch:"There's a balance between error-proofing and adding friction — over-guarding low-risk actions, like sending a normal email, can frustrate users more than it protects them."},
+
+  {cat:"mech", platform:"both", name:"Discoverability", hook:"Can users find what's possible?",
+    def:"A design must let users determine, at a glance, what actions are actually available to them and understand what state the system is currently in. Powerful features that are invisible or unlabeled might as well not exist for the vast majority of users.",
+    why:"A feature that exists but that users can't find is functionally equivalent to a feature that was never built — all the engineering investment behind it delivers zero value if nobody discovers it.",
+    points:[{"text":"Users must be able to tell, at a glance, what actions are available and what state the system is currently in."},{"text":"A powerful feature that's invisible or unlabeled might as well not exist for the vast majority of users."}],
+    when:"Apply it whenever you introduce any non-obvious interaction — a gesture, a keyboard shortcut, a hidden menu, or any powerful feature that isn't represented by a visible, labeled control.",
+    how:"Pair novel interactions with a visible entry point or a one-time hint the first time a user might benefit from it (a tooltip, a subtle animation, an empty-state prompt), and periodically audit your product for features that quietly went undiscovered by real users in session recordings or analytics.",
+    example:[
+      "A swipe-to-archive gesture in an email app is easy to miss entirely unless it's paired with a brief onboarding hint the first time.",
+      "Right-click context menus hide useful actions from users who never think to right-click — surfacing key ones as visible buttons improves discoverability."
+    ],
+    watch:"Novel interactions, gestures, keyboard shortcuts, almost always need a visible entry point or hint the first time, or most users will simply never find them."},
+
+  {cat:"mech", platform:"both", name:"The UI Stack (Five States)", hook:"Every screen has 5 lives.",
+    def:"Every screen in a product needs to be explicitly designed for five distinct states, not just the happy path: the Ideal state, full of useful content, the Empty or Blank state, before any data exists, the Error state, something went wrong, the Partial state, some but not all content is present, and the Loading state, data is being fetched.",
+    why:"Teams naturally design and demo the Ideal state because it looks the best in a portfolio or pitch — but real users spend enormous amounts of time in the other four states, and neglecting them creates jarring, broken-feeling moments in the actual product.",
+    points:[{"text":"Every screen needs an explicit design for five distinct states — not just the happy path:"},{"term":"Ideal","text":"full of useful, actionable content"},{"term":"Empty / Blank","text":"the first-time experience, before any data exists yet"},{"term":"Error","text":"something has gone wrong"},{"term":"Partial","text":"some content exists, but not the full picture yet"},{"term":"Loading","text":"data is currently being fetched"}],
+    when:"Apply it at the start of designing any new screen or feature, not as an afterthought — plan for all five states before a single pixel of the 'happy path' is finalized.",
+    how:"For every screen, explicitly sketch or wireframe: what a first-time user with zero data sees (Empty), what a partially-populated screen looks like (Partial), what happens when something fails (Error), what the user sees while waiting (Loading), and only then, the fully-populated (Ideal) version.",
+    example:[
+      "An empty inbox that says 'You're all caught up' with an illustration, instead of just a blank white screen with no explanation.",
+      "A dashboard with only one data point yet, the Partial state, shows a subtle prompt suggesting the next action to unlock more insight."
+    ],
+    watch:"Teams often design and test only the Ideal state, then discover the Empty and Error states were never designed at all once the product ships."},
+
+  {cat:"mech", platform:"both", name:"Feedback", hook:"Every action deserves a reaction.",
+    def:"Every action a user takes should be met with a clear, immediate signal that the system registered it. Without feedback, users are left wondering whether their click worked, and will often click again, sometimes triggering the action twice.",
+    why:"Without a clear signal that an action registered, users are left uncertain whether their input worked at all — and uncertainty commonly leads to repeated actions, like double-submitting a form, or to users abandoning the task assuming it failed.",
+    points:[{"text":"Every action a user takes should be met with a clear, immediate signal that the system registered it."},{"text":"Without that signal, users second-guess whether their click worked — and often click again, sometimes triggering the action twice."}],
+    when:"Apply it to every interactive element a user can act on, but especially anything with a delay (uploads, saves, network calls) or anything with real consequence (payments, deletions, submissions).",
+    how:"Match the intensity of the feedback to the stakes of the action: a subtle hover or color change is enough for minor actions, while consequential actions deserve an explicit confirmation message, and anything with a delay needs a progress indicator so users know the system hasn't stalled.",
+    example:[
+      "A button that briefly shows a checkmark and the text 'Saved!' after being clicked, instead of just going quiet.",
+      "A file upload that shows a progress bar and percentage, rather than a static screen with no indication anything is happening."
+    ],
+    watch:"Feedback needs to be proportional — a tiny visual change is enough for a minor action, but a destructive or high-stakes action deserves a much clearer confirmation."},
+
+  {cat:"mech", platform:"both", name:"Affordances & Signifiers", hook:"What it does vs. what tells you that.",
+    def:"An affordance is the actual possible interaction an object offers, a button affords clicking, a slider affords dragging. A signifier is the visual cue that communicates that affordance exists in the first place, like a shadow, bevel, or underline. A control can have an affordance with no signifier, hidden functionality, or a signifier with no real affordance, a fake-looking button that does nothing.",
+    why:"An affordance without a signifier is invisible functionality nobody will find, and a signifier without a real affordance is a false promise that erodes trust the moment a user clicks something that looks interactive but isn't.",
+    points:[{"term":"Affordance","text":"the actual interaction an object offers — a button affords clicking, a slider affords dragging"},{"term":"Signifier","text":"the visual cue that tells you the affordance exists — a shadow, a bevel, an underline"},{"text":"A control can have an affordance with no signifier (hidden functionality), or a signifier with no real affordance (a fake-looking button that does nothing)."}],
+    when:"Apply this whenever you're deciding how an interactive element should look, especially in minimalist or 'flat' design systems where visual cues are often stripped away for aesthetics.",
+    how:"For every control, deliberately choose a visual signifier, shadow, underline, color, cursor change, that matches its real affordance, and periodically audit your interface for elements that look clickable but aren't, or are clickable but don't look it.",
+    example:[
+      "A raised, shadowed button, the signifier, tells you it's clickable, the affordance, before you ever try interacting with it.",
+      "Underlined blue text signifies 'this is a link' even though technically any text could theoretically be made clickable."
+    ],
+    watch:"Flat design trends often strip away signifiers, shadows, borders, for a cleaner look, which can accidentally hide real affordances from users."},
+
+  {cat:"mech", platform:"both", name:"Mappings", hook:"Controls should move like their results.",
+    def:"The relationship between a control and the effect it produces should follow a natural, intuitive spatial analogy, so the direction of the interaction matches the direction of the outcome. When mappings are unnatural, users have to consciously translate the control's motion into its effect, adding friction.",
+    why:"When a control's motion doesn't match its effect, users have to consciously translate the interaction rather than acting on instinct, adding friction and increasing the chance of mistakes, especially under time pressure.",
+    points:[{"text":"A control's effect should follow a natural spatial analogy — the direction of the interaction should match the direction of the outcome."},{"text":"When mappings are unnatural, people have to consciously translate motion into effect, which adds friction to every use."}],
+    when:"Apply it whenever designing any control with a directional or spatial quality — sliders, dials, drag interactions, or any layout where a physical control corresponds to an on-screen or real-world result.",
+    how:"Default to well-established spatial conventions (up increases, right advances, dragging matches direction of effect) unless you have a strong, tested reason to deviate, and validate any non-obvious mapping with real users before shipping it broadly.",
+    example:[
+      "Dragging a volume slider upward increases the volume — the physical motion of the drag matches the outcome.",
+      "On a stovetop, if the burner layout mirrors the knob layout, front-left knob controls front-left burner, the mapping is obvious without a label."
+    ],
+    watch:"Mappings can be culturally dependent — 'up means more' is common, but not every interaction has an equally universal spatial analogy."},
+
+  {cat:"mech", platform:"mobile", name:"Ergonomics & the Thumb Zone", hook:"Design for the hand, not just the eye.",
+    def:"Mobile interfaces should account for the thumb zone, a heat map of which areas of the screen are comfortable to reach one-handed versus which require an awkward stretch or a second hand. Primary, frequent actions belong in the easy zone; rare or destructive actions can sit further away.",
+    why:"On mobile, physical reach constraints are just as real as visual or cognitive ones — a button that's visually perfect but physically awkward to reach one-handed will still get missed, mis-tapped, or avoided.",
+    points:[{"text":"Mobile layouts should map to the thumb zone — the areas of a screen that are comfortable to reach one-handed."},{"text":"Frequent, primary actions belong in the easy-reach zone; rare or destructive ones can sit further away."}],
+    when:"Apply it to any mobile-first interface, especially frequently used primary actions, navigation, and anything users are likely to reach for one-handed while multitasking.",
+    how:"Place your most frequent, highest-value actions in the easy-reach lower-center zone of the screen; push rare or destructive actions further away or behind an extra confirmation step; and test your layout by actually holding a phone one-handed rather than only reviewing it on a desktop mockup.",
+    example:[
+      "Most mobile apps place primary navigation and key actions along the bottom edge of the screen, not the top, since thumbs reach down more easily than up.",
+      "A back gesture from the left edge of the screen is easier for most right-handed grip patterns than a tiny top-left back arrow."
+    ],
+    watch:"Screen sizes and hand sizes vary a lot — the thumb zone is a strong heuristic, not a guarantee for every single user or device."},
+
+  {cat:"vis", platform:"both", name:"Visual Hierarchy", hook:"Importance should be visible, not implied.",
+    def:"Visual cues, size, weight, color, and position, must communicate the relative importance of elements on a screen. The more important something is, the more visually prominent it should be, and logically related items should be grouped together so relationships are obvious without reading a word of copy.",
+    why:"Without a deliberate hierarchy, every element competes equally for attention, and the user is forced to do the sorting work themselves, guessing what matters instead of instantly perceiving it.",
+    points:[{"text":"Size, weight, color, and position should signal relative importance — the more important something is, the more visually prominent it should be."},{"text":"Logically related items should be grouped together, so relationships are obvious without reading a word of copy."}],
+    when:"Apply it any time a screen presents more than one piece of information or one possible action — which is to say, on almost every screen you design.",
+    how:"Decide the single most important thing on the screen first, then deliberately make it the largest, boldest, or most colorful element, and dial everything else down in relative prominence; group related items visually so their relationship is obvious without needing a label.",
+    example:[
+      "A pricing page where the recommended plan is visually larger, has a colored border, and sits in the center — pulling the eye there first.",
+      "A dashboard headline metric is rendered in a huge bold number, while supporting context sits in small gray text beneath it."
+    ],
+    watch:"If every element is made 'important', bold, colored, large, none of them actually stand out — hierarchy requires genuine trade-offs, not just decoration."},
+
+  {cat:"vis", platform:"both", name:"Scanning vs. Reading", hook:"Users scan. Design for skimmers.",
+    def:"Users very rarely read a page top to bottom, word for word, instead, they scan for keywords, patterns, and visual landmarks that match what they're looking for. Designs should support scanning behavior with large fonts, generous white space, bulleted lists, and short paragraphs rather than dense blocks of text.",
+    why:"Designing as though users will read every word leads to dense, intimidating screens that get skipped entirely — supporting scanning behavior instead means the key information gets through even to someone giving the page five seconds of attention.",
+    points:[{"text":"People rarely read a page top to bottom, word for word — they scan for keywords, patterns, and visual landmarks."},{"text":"Support that with large fonts, generous white space, bullet points, and short paragraphs — not dense blocks of text."}],
+    when:"Apply it to any content-heavy screen — landing pages, feature descriptions, settings panels, documentation — where users are likely to skim rather than commit to full reading.",
+    how:"Break long paragraphs into short ones or bullet points, bold the specific phrases that carry the core meaning, and add generous white space so the eye has natural resting points; reserve dense full-paragraph text only for content that genuinely requires careful reading, like legal or medical instructions.",
+    example:[
+      "Bolding key phrases within a paragraph so a skimming eye still catches the main point even without reading every word.",
+      "Breaking a long feature description into 3 short bullet points instead of one dense paragraph."
+    ],
+    watch:"Scannability shouldn't come at the cost of removing necessary nuance — some content, legal terms, medical instructions, genuinely needs full reading, and should be flagged as such."},
+
+  {cat:"vis", platform:"both", name:"Pattern Recognition & Mental Models", hook:"Users expect what they've seen before.",
+    def:"The brain naturally looks for patterns, even where none technically exist, and users carry mental models, expectations, built from prior experience across many other products, of where things like a search bar, a logo, or a shopping cart icon should be.",
+    why:"Users don't approach your product as a blank slate — they arrive with expectations built from every other product they've used, and violating those expectations forces them to consciously relearn something that should have been automatic.",
+    points:[{"text":"The brain naturally looks for patterns, even where none technically exist."},{"text":"Users carry mental models — expectations built from every other product they've used — about where things like a search bar or a logo 'should' be."}],
+    when:"Apply it when deciding where to place common, universally-expected elements — navigation, search, logo, cart icon — and be cautious about breaking convention purely for the sake of visual novelty.",
+    how:"Default to established conventions for common elements unless you have strong evidence a deviation genuinely improves the experience, and if you do break a mental model, make the new pattern obviously discoverable to offset the unlearning cost.",
+    example:[
+      "Putting the logo top-left and linking it back to the homepage, because that's the mental model almost every web user already carries.",
+      "A shopping cart icon in the top-right corner of an e-commerce site, because that convention is now nearly universal."
+    ],
+    watch:"Breaking a strong existing mental model, like moving the cart icon to an unexpected location, usually costs more in confusion than it gains in novelty."},
+
+  {cat:"vis", platform:"both", name:"The Squint Test", hook:"Blur it to find what stands out.",
+    def:"A quick evaluation technique where a designer squints at, or blurs, an interface to strip away fine detail, revealing whether the visual hierarchy is strong enough that the truly important elements remain identifiable even at a glance.",
+    why:"It's a fast, low-cost way to catch a weak visual hierarchy before investing in full usability testing — if the important elements don't survive having their fine detail stripped away, no amount of polish elsewhere will fix that underlying structural problem.",
+    points:[{"text":"Squint at, or blur, an interface to strip away its fine detail."},{"text":"If the truly important elements are still identifiable through the blur, the visual hierarchy is strong enough."}],
+    when:"Apply it near the end of any visual design pass, as a quick sanity check before moving to detailed testing or before shipping a design to engineering.",
+    how:"Literally squint at your screen, or blur it in a design tool, and note what still stands out. If your primary action or key message doesn't survive the blur, increase its size, contrast, or isolation from surrounding elements until it does.",
+    example:[
+      "Squinting at a landing page — if the primary CTA button doesn't still visually pop out from the rest of the blur, its hierarchy is too flat.",
+      "Try the Squint Test toggle at the top of this app: it blurs this entire grid, and only the card you hover sharpens back into focus."
+    ],
+    watch:"It's a fast sanity check, not a replacement for real usability testing with actual users and tasks."},
+
+  {cat:"vis", platform:"both", name:"Cognitive Load (Cognitive / Visual / Motor)", hook:"Thinking costs more than clicking.",
+    def:"Users spend three distinct kinds of resources when using a product: cognitive load, thinking and remembering, visual load, looking and searching, and motor load, clicking, tapping, or moving. Of the three, cognitive load is generally the most mentally expensive, which is why it's often worth adding an extra click if it removes the need to recall or calculate something.",
+    why:"Not all effort is equal — asking someone to remember or calculate something is mentally far more taxing than asking them to make an extra click, so optimizing purely for fewer clicks can actually make an experience feel harder, not easier.",
+    points:[{"text":"Using a product spends three distinct kinds of resources:"},{"term":"Cognitive load","text":"thinking and remembering"},{"term":"Visual load","text":"looking and searching"},{"term":"Motor load","text":"clicking, tapping, or moving"},{"text":"Cognitive load is generally the most expensive of the three — which is why it's often worth an extra click if it removes the need to recall or calculate something."}],
+    when:"Apply it whenever a user needs to recall information, do mental math, or keep multiple things in their head at once to complete a task — data entry, configuration, or any multi-step process with dependencies between steps.",
+    how:"Replace recall-based interactions (blank text fields requiring the user to remember exact values or formats) with recognition-based ones (dropdowns, autocomplete, pre-filled defaults) wherever the added click is cheaper than the mental effort it saves.",
+    example:[
+      "An autocomplete address field beats a blank text field, because recognizing a listed suggestion is cognitively cheaper than recalling the exact correct format.",
+      "A dropdown of pre-set shipping options is easier than a free-text field asking users to type their preferred delivery speed."
+    ],
+    watch:"Adding clicks isn't free either — this trade-off only works when the click meaningfully reduces thinking, not when it's just extra navigation."},
+
+  {cat:"beh", platform:"both", name:"The Hook Model", hook:"Trigger → Action → Reward → Investment.",
+    def:"A four-phase cycle used to design habit-forming products: an external or internal Trigger prompts the user, a simple Action follows in anticipation of a reward, a Variable Reward satisfies the underlying need while leaving the user wanting more, and an Investment, some small effort put into the product, increases its value to the user and quietly sets up the next trigger.",
+    why:"Understanding this loop lets a PM diagnose exactly which stage of a product's engagement is broken — weak retention is rarely one vague problem, it's usually a specific missing trigger, an unrewarding action, or a reward that fails to leave the user wanting more.",
+    points:[{"text":"A four-phase cycle for designing habit-forming products:"},{"term":"Trigger","text":"an external or internal prompt that starts the cycle"},{"term":"Action","text":"the simplest behavior done in anticipation of a reward"},{"term":"Variable Reward","text":"satisfies the need, but leaves the user wanting more"},{"term":"Investment","text":"a small effort that raises the product's value and quietly sets up the next trigger"}],
+    when:"Apply it when designing or diagnosing any feature meant to build a recurring habit — notifications, streaks, feeds, or anything intended to bring users back repeatedly rather than being used once.",
+    how:"Map your existing feature onto all four phases explicitly (Trigger, Action, Variable Reward, Investment) and look for the weakest link; strengthen it specifically rather than making vague general improvements, and use ethical judgment about when habit formation crosses into manipulation.",
+    example:[
+      "Duolingo: a push notification, trigger, leads to opening the app for one lesson, action, followed by a satisfying streak animation, variable reward, then the growing streak count itself, investment, which becomes tomorrow's reason to return.",
+      "Instagram: a notification badge, trigger, leads to opening the feed, action, an unpredictable mix of interesting and mundane posts, variable reward, then liking and following more accounts, investment."
+    ],
+    watch:"This model is explicitly about habit formation — used irresponsibly, it can produce compulsive rather than genuinely valuable engagement, which is a real ethical consideration for PMs."},
+
+  {cat:"beh", platform:"both", name:"Fogg Behavior Model (B=MAT)", hook:"Motivation × Ability × Trigger, all at once.",
+    def:"A behavior only occurs when sufficient Motivation, sufficient Ability, and a well-timed Trigger all converge at the exact same moment. If any one of the three is missing or too weak, the behavior won't happen, and increasing a user's Ability, making the task easier, is usually the highest-leverage, most reliable lever to pull, since motivation is harder to manufacture.",
+    why:"It gives a precise diagnostic instead of a vague one — when a desired behavior isn't happening, this model forces you to identify specifically whether Motivation, Ability, or Trigger is the actual missing ingredient, rather than guessing.",
+    points:[{"text":"A behavior only happens when all three of these converge at the exact same moment:"},{"term":"Motivation","text":"the user genuinely wants the outcome"},{"term":"Ability","text":"the task is easy enough to actually do"},{"term":"Trigger","text":"something prompts the action right now"},{"text":"If any one is missing, the behavior won't happen — and increasing Ability is usually the highest-leverage, most reliable lever to pull."}],
+    when:"Apply it whenever an intended user behavior has low adoption despite people seemingly wanting the outcome — feature adoption, onboarding completion, or any action with a suspiciously low conversion rate.",
+    how:"Diagnose in order: is there a trigger at all? Is the user actually motivated? Is the task easy enough given their current motivation level? Since increasing Ability, simplifying the task, is usually cheaper and more reliable than trying to manufacture more motivation, start there.",
+    example:[
+      "Users want to update their profile photo, motivation, but the upload flow is buried four menus deep, low ability, so almost no one does it.",
+      "A one-tap 'reorder' button on a food delivery app succeeds because it removes almost all the ability barrier for an already-motivated, already-triggered user."
+    ],
+    watch:"Don't default to 'we need more motivation', bigger incentives, louder messaging, when the real blocker is usually Ability — that's the cheaper and more reliable fix."},
+
+  {cat:"beh", platform:"both", name:"The CREATE Action Funnel", hook:"Six gates before a conscious action.",
+    def:"A more granular model for deliberate, non-habitual actions, unlike the Hook Model, which is about automatic habits. A user must pass through six sequential mental gates before acting: Cue, notice something, Reaction, a gut response, Evaluation, is it worth it, Ability, can I actually do it, Timing, is now the moment, and Experience, was doing it actually good, shaping future behavior.",
+    why:"For one-off, deliberate decisions, rather than automatic habits, there are more places the process can silently break down, and this funnel exposes each one so you can pinpoint exactly where users are dropping off instead of treating the whole conversion as one opaque black box.",
+    points:[{"text":"For a deliberate, non-habitual action, a user passes through six sequential mental gates:"},{"term":"Cue","text":"notice something"},{"term":"Reaction","text":"a gut response"},{"term":"Evaluation","text":"is it worth it?"},{"term":"Ability","text":"can I actually do it?"},{"term":"Timing","text":"is now the moment?"},{"term":"Experience","text":"was doing it actually good — shaping future behavior"}],
+    when:"Apply it to single, deliberate conversion moments — an upgrade prompt, a one-time donation ask, a big purchase decision — rather than to everyday habitual interactions, which the Hook Model handles better.",
+    how:"Walk a real user's likely path through all six gates (Cue, Reaction, Evaluation, Ability, Timing, Experience) and identify the specific gate where they're most likely to drop off; fix that gate directly, for example by moving a prompt's Timing to follow a positive Experience instead of interrupting a task.",
+    example:[
+      "An 'upgrade to Pro' prompt can fail purely on the Timing gate — the user might be motivated and able, but it appears mid-task and gets dismissed reflexively.",
+      "A one-time donation prompt succeeds when it appears right after a positive Experience, like finishing a helpful article, rather than immediately on page load."
+    ],
+    watch:"Because this model has more failure points than Fogg's, it's best for diagnosing why a single, deliberate conversion action isn't happening — not for everyday habitual UI."},
+
+  {cat:"beh", platform:"both", name:"Self-Determination Theory", hook:"Autonomy, Mastery, Purpose.",
+    def:"A theory of intrinsic motivation stating that people are genuinely driven by three underlying needs: Autonomy, feeling in control of their own choices, Mastery, the satisfaction of getting better at something over time, and Purpose, a sense of belonging to something larger than themselves. Products that tap into these tend to sustain engagement without relying purely on external nudges.",
+    why:"External nudges like notifications and rewards can drive short-term engagement, but they don't sustain it on their own — tapping into genuine intrinsic motivation (autonomy, mastery, purpose) builds engagement that holds up even without constant external prompting.",
+    points:[{"text":"People are intrinsically driven by three underlying needs:"},{"term":"Autonomy","text":"feeling in control of your own choices"},{"term":"Mastery","text":"the satisfaction of getting better at something over time"},{"term":"Purpose","text":"a sense of belonging to something larger than yourself"},{"text":"Products that tap into these tend to sustain engagement without relying purely on external nudges."}],
+    when:"Apply it when designing for long-term, sustained engagement rather than a single conversion moment — community products, learning products, or anything meant to matter to a user over months or years, not just one session.",
+    how:"Audit your product for each pillar: does the user feel real Autonomy over meaningful choices, do they have a visible sense of Mastery or progress over time, and is there a Purpose or community larger than themselves to belong to? Strengthen whichever pillar is weakest rather than only adding more external rewards.",
+    example:[
+      "A fitness app showing a visible skill progression tree, mastery, alongside fully customizable goals, autonomy, and a community leaderboard, purpose.",
+      "Open-source contribution platforms sustain long-term engagement largely through mastery and purpose, with very little external reward mechanics involved."
+    ],
+    watch:"This is a slower, deeper form of engagement than notification-driven habit loops — it's a poor fit for products that need fast, short-term growth metrics."},
+
+  {cat:"beh", platform:"both", name:"Aesthetics & Emotion", hook:"Pretty things feel more usable.",
+    def:"Attractive interfaces are consistently perceived by users as more usable, even when actual task success is identical, a well-documented effect. Emotions triggered by an interaction tend to be short-lived, minutes to hours, while the personality a user comes to ascribe to a whole product is far more durable and shapes long-term trust.",
+    why:"Perceived usability directly affects trust and adoption, independent of actual functional quality — meaning visual polish isn't just decoration, it measurably changes how usable people believe your product to be, which shapes whether they give it a real chance.",
+    points:[{"text":"Attractive interfaces are consistently perceived as more usable — even when actual task success is identical."},{"text":"Emotions from a single interaction fade in minutes or hours; the 'personality' a product earns in a user's mind lasts far longer."}],
+    when:"Apply it any time you're tempted to deprioritize visual craft as 'just polish' relative to core functionality — recognize that the two aren't actually separable in how users perceive quality.",
+    how:"Invest genuine design craft even on functionally 'solved' screens, and separately, run real usability testing specifically to catch cases where an attractive design might be masking a genuine usability flaw that users would otherwise have flagged.",
+    example:[
+      "Two functionally identical apps in a usability test — the more polished one is consistently rated easier to use, even with equal task completion rates.",
+      "A brand's playful microcopy and illustration style, its personality, outlasts any single positive or negative interaction a user has with it."
+    ],
+    watch:"Aesthetic-driven perceived usability can also backfire — a beautiful interface that's actually hard to use may mask real usability problems from being caught in testing."},
+
+  {cat:"strat", platform:"both", name:"Design Thinking Constraints", hook:"Desirable, Feasible, Viable.",
+    def:"Successful product ideas need to satisfy three overlapping constraints simultaneously: Desirability, does anyone actually want this, Feasibility, can it realistically be built with current technology and skills, and Viability, does it make economic sense for the business. An idea that's strong on only one or two of these usually fails.",
+    why:"Ideas commonly fail not because they lacked user demand, but because a team never seriously tested Feasibility or Viability until far too late — all three constraints have to hold simultaneously, and neglecting any one of them is a common, avoidable cause of failed launches.",
+    points:[{"text":"Successful product ideas need to satisfy three overlapping constraints at once:"},{"term":"Desirability","text":"does anyone actually want this?"},{"term":"Feasibility","text":"can it realistically be built?"},{"term":"Viability","text":"does it make economic sense for the business?"},{"text":"An idea that's strong on only one or two of these usually fails."}],
+    when:"Apply it during early-stage prioritization or roadmap decisions, before significant engineering investment is committed to any single idea.",
+    how:"Score every candidate idea explicitly against all three dimensions, not just the one your team is naturally biased toward (product teams often over-weight Desirability, engineering-led teams over-weight Feasibility) — and treat a weak score on any single dimension as a real red flag, not something to paper over.",
+    example:[
+      "A voice-controlled smart fridge might be desirable, but if it's not feasible on current hardware at an acceptable cost, or not viable at the price point customers will pay, it won't ship successfully.",
+      "A PM prioritization doc that scores each candidate feature against all three constraints, not just user demand, tends to surface hidden risks earlier."
+    ],
+    watch:"Teams frequently over-index on Desirability alone, what users say they want, and under-invest in honestly assessing Feasibility and Viability early."},
+
+  {cat:"strat", platform:"both", name:"Double Diamond Model", hook:"Discover, Define, Develop, Deliver.",
+    def:"A four-stage design process that deliberately alternates between divergent thinking, opening up to generate many possible options, and convergent thinking, narrowing down to a specific decision: Discover, explore the problem broadly, Define, narrow to the real problem statement, Develop, explore many possible solutions, and Deliver, narrow to and ship the chosen solution.",
+    why:"Skipping the divergent half of either diamond, jumping straight to 'the' obvious problem or 'the' obvious solution, is one of the most common causes of teams building the wrong thing efficiently, because they never seriously considered alternatives.",
+    points:[{"text":"A four-stage process that alternates divergent and convergent thinking:"},{"term":"Discover","text":"explore the problem broadly (divergent)"},{"term":"Define","text":"narrow to the real problem statement (convergent)"},{"term":"Develop","text":"explore many possible solutions (divergent)"},{"term":"Deliver","text":"narrow to and ship the chosen solution (convergent)"}],
+    when:"Apply it when scoping any non-trivial product or design initiative from scratch, especially when the underlying problem isn't yet fully understood or agreed upon by the team.",
+    how:"Force genuine divergence before every convergence: in Discover, generate a wide range of possible problem framings before narrowing to one in Define; in Develop, prototype multiple distinct solution concepts before narrowing to one to ship in Deliver.",
+    example:[
+      "Discover: broad user interviews reveal several possible causes of churn. Define: the team narrows in on one root cause. Develop: three different solution concepts are prototyped. Deliver: the winning concept is refined and shipped.",
+      "A redesign project that skips straight from Discover to Deliver without a Define or Develop phase usually ends up solving the wrong problem efficiently."
+    ],
+    watch:"The two diamonds aren't optional shortcuts — skipping the divergent half of either diamond, jumping straight to the 'obvious' answer, is the most common way teams misuse this model."},
+
+  {cat:"strat", platform:"both", name:"Lean UX", hook:"Learn fast, document less.",
+    def:"An approach that prioritizes outcomes over polished deliverables, relying on rapid, low-cost MVP experiments to test specific hypotheses and build shared understanding across a cross-functional team, rather than producing heavy upfront specs or pixel-perfect mockups before anything is validated.",
+    why:"Heavy upfront documentation and pixel-perfect design are expensive to produce and expensive to change — when the underlying assumption is still unvalidated, that investment is at high risk of being wasted entirely.",
+    points:[{"text":"Prioritizes outcomes over polished deliverables."},{"text":"Uses rapid, low-cost MVP experiments to validate hypotheses and build shared understanding — instead of heavy upfront specs or pixel-perfect mockups."}],
+    when:"Apply it early, when a core assumption behind a feature or product is still unproven, and the cost of being wrong is still low. It's less appropriate once you're committing real, hard-to-reverse investment.",
+    how:"Identify the riskiest assumption underlying your idea, then design the cheapest possible experiment, a fake-door test, a manual concierge version, a rough prototype, that could prove or disprove it, before writing detailed specs or polished designs.",
+    example:[
+      "Shipping a manual, 'Wizard of Oz' concierge version of a feature, a human quietly doing the work behind the scenes, before investing in the fully automated version.",
+      "A landing page that tests demand for a not-yet-built product feature, using signups as the validation signal before any engineering begins."
+    ],
+    watch:"Lean UX trades rigor for speed — it's excellent for validating risky, unproven assumptions, but shouldn't replace deeper research once real investment is on the line."},
+
+  {cat:"strat", platform:"both", name:"Human-Centered Design (HCD)", hook:"Start with people, not screens.",
+    def:"An approach that puts human needs, capabilities, and behavior first, typically starting with direct observation of users in their real, natural environment, not a lab or a survey, to surface thoughtless acts and latent needs that people themselves might not think to mention if simply asked.",
+    why:"People often can't articulate their own latent needs or workarounds when simply asked directly — direct observation surfaces the 'thoughtless acts' and quiet workarounds that interviews and surveys alone routinely miss.",
+    points:[{"text":"Puts human needs, capabilities, and behavior first."},{"text":"Starts with direct observation of users in their real environment — surfacing needs people wouldn't think to mention if simply asked."}],
+    when:"Apply it when entering an unfamiliar domain or user group, or when a problem space is genuinely not well understood yet — it's a heavier investment, so it's less necessary for small, well-understood, incremental changes.",
+    how:"Go observe real users in their actual environment doing the real task, not a simulated version of it, and pay specific attention to workarounds, hesitations, and improvised behaviors — those are usually where the real unmet need is hiding.",
+    example:[
+      "Watching farmers actually use a paper ledger in the field, rather than just asking them to describe their record-keeping process, before designing a digital replacement.",
+      "Observing how nurses actually move through a hospital ward during a shift change reveals workflow needs that a formal interview alone would likely miss."
+    ],
+    watch:"Field observation is time- and resource-intensive — it's most valuable for unfamiliar domains or user groups, less critical for well-understood, incremental changes."},
+
+  {cat:"strat", platform:"both", name:"UX Strategy Tenets", hook:"Four pillars hold up good UX.",
+    def:"A solid UX strategy requires balancing four pillars together, not just one: Business Strategy, alignment with real company goals, Value Innovation, offering a genuinely differentiated alternative, not a copy of competitors, Validated User Research, real evidence, not assumptions, and Frictionless UX, execution quality in the actual interface.",
+    why:"A product can excel at any single pillar, gorgeous interface, novel value proposition, rock-solid research, and still fail if the other pillars are neglected — real product success requires holding all four together, not choosing a favorite.",
+    points:[{"text":"A solid UX strategy balances four pillars together, not just one:"},{"term":"Business Strategy","text":"alignment with real company goals"},{"term":"Value Innovation","text":"a genuinely differentiated alternative, not a copy of competitors"},{"term":"Validated User Research","text":"real evidence, not assumptions"},{"term":"Frictionless UX","text":"execution quality in the actual interface"}],
+    when:"Apply it when evaluating whether an overall product or UX strategy is actually complete, particularly before a major launch or strategic pivot.",
+    how:"Explicitly check your strategy against all four pillars: is it aligned with real business goals, does it offer a genuinely differentiated value versus alternatives, is it backed by validated research rather than assumptions, and is the actual execution frictionless? A weak answer on any pillar is a strategic gap worth addressing directly.",
+    example:[
+      "A beautifully frictionless app that ignores the underlying business model still eventually fails, no matter how well-crafted its interface is.",
+      "A product with strong user research but no meaningful value differentiation from competitors struggles to gain traction even if it's technically well-designed."
+    ],
+    watch:"It's tempting to treat 'UX strategy' as pure craft, the fourth pillar, — the first three are often the actual reason a well-designed product still fails commercially."},
+
+  {cat:"strat", platform:"both", name:"Start With Words", hook:"Copy before wireframes.",
+    def:"UI design should begin with copywriting, explicitly drafting the real dialogue between the user and the system, before jumping into visual layout or wireframes. Words define the actual interaction and expectations; the visual design exists to support that conversation, not the other way around.",
+    why:"The actual interaction between a user and a system happens through language, labels, messages, prompts, before it happens through visuals — if the words are unclear or wrong, no amount of visual polish afterward can fully fix the underlying confusion.",
+    points:[{"text":"UI design should begin with copywriting — the real dialogue between user and system — before any visual layout."},{"text":"Words define the actual interaction; the visual design exists to support that conversation, not the other way around."}],
+    when:"Apply it at the very start of designing any new flow or feature, before wireframes or visual mockups are created, especially for error states, confirmations, and onboarding copy.",
+    how:"Draft the literal text of every message, label, and prompt the user will encounter first, as if writing a script for a conversation; only move to visual layout once that underlying dialogue reads clearly and makes sense on its own.",
+    example:[
+      "Drafting the exact text of every error message and empty state before a single wireframe is drawn, to make sure the actual guidance makes sense first.",
+      "Writing the confirmation copy for a destructive action, 'This will permanently delete 12 files. This can't be undone.', before deciding what the confirmation dialog even looks like."
+    ],
+    watch:"This is a sequencing discipline, not a rule that visuals don't matter — strong copy still needs strong visual hierarchy to actually be noticed and read."},
+
+  {cat:"mech", platform:"both", name:"Nielsen's 10 Usability Heuristics", hook:"The 10-point checklist usability pros reach for first.",
+    def:"Jakob Nielsen's canonical ten general principles for interaction design, first published in 1994 and still the most widely used checklist for spotting usability problems without running a full user study.",
+    why:"It's the single most-cited framework in UX interviews and heuristic evaluations — three to five reviewers checking a design against these ten catch roughly three-quarters of a product's usability problems without needing a single user test.",
+    points:[{"text":"Several of these ideas already live elsewhere in this library under different names — this is the exact canonical list interviewers expect you to recite:"},{"term":"Visibility of System Status","text":"the system always shows what's happening (this library's Feedback)"},{"term":"Match Between System & the Real World","text":"speak the user's language, not internal jargon or database terms"},{"term":"User Control & Freedom","text":"give people an obvious way to undo, cancel, or exit"},{"term":"Consistency & Standards","text":"identical elements should behave identically throughout"},{"term":"Error Prevention","text":"stop mistakes before they happen (this library's Poka-Yoke)"},{"term":"Recognition Rather Than Recall","text":"show options instead of making people remember them (this library's Cognitive Load)"},{"term":"Flexibility & Efficiency of Use","text":"give experienced users accelerators — shortcuts, gestures — without cluttering things for beginners"},{"term":"Aesthetic & Minimalist Design","text":"every extra element competes with the ones that actually matter"},{"term":"Help Recognize, Diagnose & Recover From Errors","text":"error messages should say what went wrong and what to do next, in plain language"},{"term":"Help & Documentation","text":"even a well-designed product sometimes needs findable, searchable help"}],
+    when:"Apply it when you need a fast, structured way to audit an existing interface, or when an interviewer asks you to critique a screen on the spot.",
+    how:"Walk any screen against all ten heuristics in order, flagging violations and rating each by severity, rather than reviewing free-form — the structure is what catches issues a casual look misses.",
+    example:[
+      "A generic 'Error occurred' message violates error recovery; rewriting it as 'Card declined — check the number and try again' fixes it.",
+      "A settings screen that behaves differently on the profile tab than the billing tab violates Consistency & Standards."
+    ],
+    watch:"Treating the ten as a rigid rulebook rather than a checklist — some heuristics trade off against each other (like minimalism vs. help & documentation), and judgment is still required."},
+
+  {cat:"vis", platform:"both", name:"Gestalt Principles of Grouping", hook:"The brain groups before it reads a single word.",
+    def:"A set of perceptual rules describing how people automatically organize visual elements into groups — proximity, similarity, closure, continuity, figure/ground, and common region — before consciously thinking about layout at all.",
+    why:"These aren't stylistic opinions — they describe how human perception works below the level of conscious thought, so violating them creates layouts that feel confusing even when every individual element is well-designed.",
+    points:[{"text":"The six most commonly cited grouping principles:"},{"term":"Proximity","text":"things placed close together are perceived as related"},{"term":"Similarity","text":"things sharing a visual trait — color, shape, size — are perceived as related"},{"term":"Closure","text":"the eye fills in gaps to perceive a complete shape or group"},{"term":"Continuity","text":"elements arranged along a line or curve are perceived as connected"},{"term":"Figure / Ground","text":"the eye separates a foreground focus from a background"},{"term":"Common Region","text":"elements inside a shared boundary, like a card or box, are perceived as one group"}],
+    when:"Apply it any time you're deciding how to lay out multiple related elements — form fields, card grids, navigation groups, dashboards.",
+    how:"Use proximity and common region (borders, background shading) to group related fields or actions without needing extra labels; use similarity so all interactive elements share a consistent visual language; use figure/ground deliberately to focus attention, e.g. dimming the background behind a modal.",
+    example:[
+      "A checkout form groups 'City / State / ZIP' tightly together and separates it from the payment section with extra whitespace, using proximity alone to communicate structure.",
+      "A modal dialog dims the rest of the page — figure/ground tells the eye exactly where to focus without an instruction."
+    ],
+    watch:"Relying on proximity or similarity alone when the actual grouping is ambiguous — if two different groupings are both visually plausible, add an explicit divider or label rather than trusting Gestalt cues to disambiguate for you."},
+
+  {cat:"access", platform:"both", name:"Accessibility — POUR Principles", hook:"Usability that excludes a user isn't usability.",
+    def:"The WCAG framework organizing digital accessibility into four principles: content and interfaces must be Perceivable, Operable, Understandable, and Robust for people using assistive technology.",
+    why:"Accessibility gaps aren't edge cases — they affect a large share of any real user base (temporary injuries, aging users, bright sunlight on a phone screen, a broken trackpad) and are frequently a legal requirement, not just a nice-to-have.",
+    points:[{"text":"Content must be:"},{"term":"Perceivable","text":"presentable through more than one sense — alt text for images, captions for video, sufficient color contrast"},{"term":"Operable","text":"usable without a mouse — full keyboard navigation, no interactions requiring precise timing or fine motor control"},{"term":"Understandable","text":"written in clear language, with predictable navigation and helpful error messages"},{"term":"Robust","text":"built to work reliably with assistive technology like screen readers, both now and as that technology evolves"}],
+    when:"Apply it from the start of any design, not as an audit at the end — retrofitting accessibility onto a finished product is far more expensive than designing for it from the first wireframe.",
+    how:"Check color contrast ratios, ensure every interactive element is reachable and operable by keyboard alone, add alt text and semantic HTML/ARIA labels, and test with a screen reader at least once per major flow.",
+    example:[
+      "A 'Submit' button with a 2:1 contrast ratio against its background fails Perceivable; increasing contrast to 4.5:1 fixes it.",
+      "A custom dropdown that only responds to mouse clicks fails Operable until it also supports keyboard arrow keys and Enter."
+    ],
+    watch:"Treating accessibility as a single checkbox item near launch — real accessibility requires testing throughout the design and build process, not a one-time audit."},
+
+  {cat:"vis", platform:"both", name:"Miller's Law (Chunking)", hook:"The mind holds about seven things at once — plan around it.",
+    def:"The average person can hold roughly 5 to 9 (7±2) discrete items in short-term working memory at once, so grouping information into smaller, meaningful chunks lets people process far more than the same information presented as one long list.",
+    why:"Every item beyond that working-memory limit isn't just 'a bit harder' — it's effectively invisible, since the mind has already run out of room to hold it while scanning the rest.",
+    points:[{"text":"The average person can hold roughly 5 to 9 (7 ± 2) discrete items in short-term working memory at once."},{"text":"Grouping information into smaller, meaningful chunks lets people process and remember far more than the same information presented as one long, undifferentiated list."}],
+    when:"Apply it to any long list of options, navigation items, or steps — phone numbers, form sections, and multi-step onboarding flows.",
+    how:"Break long sequences into smaller chunks (like a phone number's area code / prefix / line number), and cap primary navigation to roughly seven or fewer top-level items, pushing the rest into a clearly labeled secondary menu.",
+    example:[
+      "A 12-digit account number displayed as 4 groups of 3 digits is dramatically easier to enter correctly than the same 12 digits with no separators.",
+      "A navigation bar with 15 flat links gets restructured into 5 categories, each expandable — matching working memory instead of overwhelming it."
+    ],
+    watch:"Chunking for the sake of chunking — if grouping obscures a genuinely simple, short list, it adds a layer of navigation the user didn't need."},
+
+  {cat:"mech", platform:"both", name:"Progressive Disclosure", hook:"Show the essentials first; earn the right to show the rest.",
+    def:"A design approach that reveals only the options or information relevant to what the user is doing right now, deferring secondary, advanced, or rarely-used functionality behind a clear 'more' or 'advanced' entry point.",
+    why:"Every visible option is a small tax on Hick's Law and cognitive load for every user, even the ones who'll never touch it — deferring rarely-used complexity keeps the common path fast while still leaving the door open for people who need more.",
+    points:[{"text":"Reveal only the options relevant to what the user is doing right now."},{"text":"Defer secondary, advanced, or rarely-used functionality behind a clear 'more' or 'advanced' entry point."},{"text":"This keeps a screen approachable for first-time users without removing power-user functionality entirely."}],
+    when:"Apply it whenever a feature genuinely serves two different audiences with two different needs — casual users who want the default path, and power users who want fine control.",
+    how:"Identify the 80% use case and put only that on the primary screen; move the remaining options behind a clearly labeled 'Advanced settings' or 'More options' disclosure, and never hide something a majority of users actually need.",
+    example:[
+      "A camera app shows just a shutter button by default, with manual exposure and ISO controls tucked behind a 'Pro mode' toggle for the minority who want them.",
+      "A search form shows one text field by default, with 'Advanced search' revealing date ranges and filters only when tapped."
+    ],
+    watch:"Burying functionality that most users actually need — progressive disclosure is for genuinely secondary features, not a way to avoid making hard prioritization calls on the main screen."},
+
+  {cat:"vis", platform:"both", name:"Von Restorff Effect (Isolation Effect)", hook:"The odd one out is the one people remember.",
+    def:"When one item in a group visually stands out from its surroundings — in color, size, or shape — it's disproportionately more likely to be noticed and remembered than the rest.",
+    why:"It's a fast, reliable way to direct attention toward exactly one thing without adding any explanatory copy — but it only works as long as it's used sparingly.",
+    points:[{"text":"When one item in a group visually stands out — in color, size, or shape — it's disproportionately more likely to be noticed and remembered."},{"text":"This works precisely because it's rare: if everything is highlighted, nothing is."}],
+    when:"Apply it when there's one specific action or piece of information you genuinely want to stand out — a recommended pricing plan, a single primary CTA among secondary ones.",
+    how:"Give the one element you want noticed a distinct color, size, or shape relative to its neighbors, and resist the urge to apply the same treatment to more than one thing on the same screen.",
+    example:[
+      "A pricing page renders four plans identically except the recommended one, which gets a colored border and a 'Most Popular' badge.",
+      "In a list of grey secondary buttons, a single blue primary button draws the eye immediately without any label explaining why."
+    ],
+    watch:"Using isolation on more than one element per screen — once several things are all 'highlighted,' the effect cancels itself out and nothing stands out anymore."},
+
+  {cat:"beh", platform:"both", name:"Peak-End Rule", hook:"People remember the peak and the ending — not the average.",
+    def:"When recalling an experience afterward, people don't average every moment — they judge it almost entirely by its most intense point (positive or negative) and by how it ended.",
+    why:"This means total time or effort invested isn't what determines whether a user walks away with a good impression — a handful of specific moments, especially the very last one, disproportionately shape the memory that drives whether they come back.",
+    points:[{"text":"People judge an experience almost entirely by its most intense point (the peak) and by how it ended."},{"text":"A mostly-smooth experience with one bad friction point, or a weak final step, gets remembered as worse than the actual average moment-to-moment experience."}],
+    when:"Apply it when designing the final step of any flow — a checkout confirmation, an offboarding flow, a support ticket resolution — and when deciding which specific pain point deserves fixing first.",
+    how:"Invest deliberately in making the final moment of a flow feel good, even if the middle is still merely functional, and prioritize fixing the single worst friction point in a journey over making many small, evenly-distributed improvements.",
+    example:[
+      "A refund process that's mostly frustrating but ends with a clear, warm confirmation message walks away with a better overall impression than the moment-to-moment friction would suggest.",
+      "An onboarding flow's final screen gets extra design polish — a small celebratory animation — specifically because it's the moment users will remember most."
+    ],
+    watch:"Polishing the ending while leaving a severe pain point untouched in the middle — the peak matters just as much as the end, and a bad enough peak will dominate the memory regardless of how the experience closes."},
+
+  {cat:"mech", platform:"both", name:"Doherty Threshold (Perceived Performance)", hook:"Under 400 milliseconds, and the user never breaks stride.",
+    def:"When a system responds to a user's action in under roughly 400 milliseconds, the interaction feels instantaneous and keeps the user's attention intact; beyond that threshold, attention starts to drift and engagement measurably drops.",
+    why:"Response time isn't just a backend performance metric — it's a direct driver of whether a user stays mentally engaged with the task or mentally checks out and starts doing something else.",
+    points:[{"text":"Under roughly 400 milliseconds, a response feels instantaneous and keeps the user's attention and flow intact."},{"text":"Beyond that threshold, users perceive a delay, their attention drifts, and their productivity and engagement measurably drop."}],
+    when:"Apply it when evaluating any interaction with a network call or processing delay — search-as-you-type, form submission, page or screen transitions, app cold starts.",
+    how:"For anything that can respond within ~400ms, do so and skip a loading indicator entirely; for anything slower, show an immediate loading state or skeleton screen within that same window so the system still feels responsive while real work continues in the background.",
+    example:[
+      "A search-as-you-type field returning results within 300ms feels instant; the same feature taking 1.5 seconds per keystroke feels sluggish enough that users stop trusting it.",
+      "An app with a 3-second cold start adds a branded loading screen within the first 400ms so the delay feels intentional rather than broken."
+    ],
+    watch:"Treating loading states as a cosmetic afterthought — a spinner that appears after a visible stall, rather than within the 400ms window, reads as the system catching up to a failure, not as smooth performance."},
+
+  {cat:"strat", platform:"mobile", name:"Platform Conventions (iOS HIG & Material Design)", hook:"Every OS already taught your users how it works.",
+    def:"iOS and Android each define comprehensive design systems — Apple's Human Interface Guidelines and Google's Material Design — that specify exactly how navigation, gestures, and standard components should look and behave on that platform.",
+    why:"Fighting platform convention forces every user of your app to unlearn muscle memory built from every other app on their phone — the cost of that relearning rarely buys enough differentiation to be worth it.",
+    points:[{"text":"iOS users expect swipe-from-edge to go back and a tab bar at the bottom; Android users expect the hardware/gesture back button to always work and are more accustomed to a navigation drawer."},{"text":"Users bring these platform-level expectations into every app they open, regardless of who built it."}],
+    when:"Apply it by default for any core navigation pattern (back behavior, tab bars, standard gestures) on mobile, reserving custom interaction patterns for the features that are actually your product's differentiator.",
+    how:"Default to each platform's native navigation and component conventions rather than inventing custom equivalents, and reserve genuine novelty for the small number of interactions that define your product's unique value.",
+    example:[
+      "An Android app that doesn't respond to the hardware or gesture back button breaks a deeply ingrained platform expectation and frustrates nearly every Android user immediately.",
+      "An iOS app using the standard tab bar and swipe-back gesture lets new users navigate confidently on their very first launch, with zero onboarding needed."
+    ],
+    watch:"Copy-pasting one platform's patterns onto the other — a straight port of an iOS tab bar onto Android, or vice versa, ignores real platform-level user expectations and feels subtly 'off.'"},
+
+  {cat:"mech", platform:"mobile", name:"Touch Target Sizing", hook:"Fingers aren't cursors — design for the pad, not the tip.",
+    def:"A finger's contact area is far larger and less precise than a mouse cursor, so touch targets need real minimum sizes to be reliably tappable — Apple recommends at least 44×44pt, Google recommends at least 48×48dp.",
+    why:"A target below the minimum doesn't just look small — it produces genuine mis-taps, especially for users with larger fingers, motor impairments, or anyone using their phone one-handed while walking or multitasking.",
+    points:[{"text":"Minimum reliably-tappable sizes: 44×44pt on iOS, 48×48dp on Android."},{"text":"The visible icon can stay smaller than that as long as the actual invisible tappable area meets the minimum — padding compensates for a small visual footprint."}],
+    when:"Apply it to every tappable element on a touch interface, but especially icon-only buttons, list-item actions, and anything placed near another tappable element.",
+    how:"Size every tap target to at least the platform minimum, and when a visual icon must stay small for aesthetic reasons, extend its invisible hit area with padding rather than shrinking the actual tappable region to match the icon.",
+    example:[
+      "A row of three small icon buttons spaced 4px apart gets redesigned with 48dp tap areas and enough spacing that adjacent buttons can no longer be mis-tapped for each other.",
+      "A tiny 'x' close icon in the corner of a card keeps its small visual size but its actual tappable hit area is invisibly expanded to a full 44×44pt square."
+    ],
+    watch:"Measuring only the visible icon size and assuming that's the tap target — the two are different things, and only the actual hit area matters for usability."},
+
+  {cat:"mech", platform:"mobile", name:"Offline & Connectivity Resilience", hook:"Mobile networks drop. Design like they will.",
+    def:"Unlike most web apps used on a stable connection, mobile apps are regularly used on unreliable networks — subways, elevators, rural areas — and need to degrade gracefully, giving users a clear, honest signal of what's cached, what's syncing, and what needs a live connection.",
+    why:"An app that silently fails or loses data the moment connectivity drops trains users not to trust it with anything important, which is a much harder problem to recover from than the outage itself.",
+    points:[{"text":"Mobile apps are regularly used on unreliable networks and need to degrade gracefully rather than simply fail."},{"text":"Users need a clear, honest signal of connectivity state — what's cached, what's mid-sync, what needs a live connection."}],
+    when:"Apply it to any mobile app where users might reasonably act while connectivity is unstable — messaging, note-taking, forms, anything involving user-generated content.",
+    how:"Cache aggressively so recently-viewed content stays available offline, queue user actions (like a sent message) for automatic retry when connectivity returns rather than discarding them, and show an explicit offline/syncing/synced status rather than pretending the connection is always solid.",
+    example:[
+      "A messaging app queues an unsent message with a visible 'sending...' state that automatically retries and updates to 'sent' once connectivity returns, instead of silently failing.",
+      "A notes app shows a small offline indicator and still lets you view and edit previously-loaded notes, syncing changes once the connection is back."
+    ],
+    watch:"Assuming a lost network request should just fail silently — from the user's perspective, an action that disappears without any status update is indistinguishable from data loss, even if it technically queued successfully."},
+
+  {cat:"mech", platform:"web", name:"Responsive & Adaptive Layout", hook:"One layout, every screen, from phone browser to ultra-wide monitor.",
+    def:"Responsive design uses fluid grids, relative units, and breakpoints so a single layout reflows cleanly across an enormous range of possible screen widths — unlike mobile apps, which typically design for a narrower, more predictable set of device sizes.",
+    why:"Web users arrive on an unpredictable mix of screen sizes, from a small phone browser to an ultrawide monitor, all viewing the exact same URL — unlike a mobile app, which is built and tested for a known, bounded set of device dimensions.",
+    points:[{"text":"Fluid grids, relative units, and breakpoints let a single layout reflow cleanly across a huge range of screen widths."},{"text":"Content priority, not just layout, often needs to change at each breakpoint — a sidebar on desktop might need to become a collapsible section on mobile web, not just a narrower sidebar."}],
+    when:"Apply it to any web page or web app, testing across at least a small-mobile, tablet, and desktop breakpoint before considering a layout done.",
+    how:"Design with fluid grids and relative units (%, rem, vw) rather than fixed pixel widths wherever layout needs to adapt, define clear breakpoints where the layout structure itself changes, and re-prioritize content at each breakpoint rather than simply shrinking everything proportionally.",
+    example:[
+      "A three-column desktop layout collapses to a single stacked column on mobile web, with the least essential column moved behind a 'more' link rather than shrunk to an unreadable width.",
+      "A data table too wide for mobile screens converts to a stacked card-per-row layout below a certain breakpoint, rather than forcing horizontal scrolling."
+    ],
+    watch:"Treating 'responsive' as just scaling the same layout down proportionally — real responsive design often needs structural changes, not just smaller versions of the same arrangement."},
+
+  {cat:"mech", platform:"web", name:"Browser Navigation & URL Predictability", hook:"The back button and the URL bar are part of your UI too.",
+    def:"Web users rely on browser-level controls — back/forward, bookmarking, sharing a URL, opening a link in a new tab — as an extension of your product's own navigation, and a predictable URL structure lets them bookmark, share, and return to exactly where they were.",
+    why:"Breaking browser-native behavior, like a back button that doesn't return to the expected previous state, doesn't just annoy users — it actively erodes the sense of control the entire web platform trained them to expect.",
+    points:[{"text":"Users treat browser controls — back/forward, bookmarking, sharing a URL — as part of your product's own navigation, whether or not you designed for them."},{"text":"A predictable URL structure lets people bookmark, share, and return to exactly the state they left."}],
+    when:"Apply it to any multi-step or multi-state web flow — search results with filters applied, a multi-step form, a single-page app with dynamic content.",
+    how:"Update the URL to reflect meaningful state changes (filters, tabs, steps) using the History API, ensure the back button returns to the actual previous state rather than reloading or resetting the page, and make sure a shared or bookmarked URL reproduces the exact view the user saved.",
+    example:[
+      "An e-commerce search page updates its URL with the applied filters, so a shared link opens directly to the same filtered results instead of the unfiltered default.",
+      "A single-page app form that breaks the back button, sending users all the way out of the flow instead of to the previous step, causes measurable step abandonment."
+    ],
+    watch:"Building a rich single-page interface that silently ignores browser history entirely — it works fine until a user does something web-native like hitting back or bookmarking, and the illusion breaks."}
+];
+
+const SCENARIOS = [
+  {q:"Your checkout form has 15 required fields crammed onto a single page, and users are abandoning it. Which principle best explains the fix of splitting it into a guided multi-step flow?",
+   options:["Tesler's Law","Fitts's Law","Poka-Yoke","The Hook Model"], correct:0,
+   why:"Tesler's Law — the form's complexity can't disappear, but a multi-step flow with smart defaults shifts the burden from the user's working memory onto the software."},
+  {q:"Your Save and Delete buttons sit right next to each other, and users keep tapping the wrong one. What principle should guide the fix?",
+   options:["Hick's Law","Poka-Yoke","Mappings","Visual Hierarchy"], correct:1,
+   why:"Poka-Yoke — error-proofing the interface (spacing, confirmation step, distinct styling) prevents the mistake rather than just letting it happen."},
+  {q:"A country dropdown lists 50 countries alphabetically with no grouping, and users take a long time to find theirs. What law explains why grouping by continent would speed this up?",
+   options:["Fitts's Law","Tesler's Law","Hick's Law","Cognitive Load"], correct:2,
+   why:"Hick's Law — decision time scales with the number of choices; grouping reduces the effective number of options a user scans at once."},
+  {q:"A brand-new user opens your dashboard and sees a completely blank screen with no guidance. Which UI Stack state were the designers responsible for handling?",
+   options:["Loading State","Error State","Empty/Blank State","Partial State"], correct:2,
+   why:"Empty/Blank State — this is the first-time experience, and it should actively onboard the user rather than leave them staring at nothing."},
+  {q:"On a mobile app, the primary action button sits within easy reach of the thumb at the bottom of the screen during one-handed use. Which concept describes this choice?",
+   options:["Affordances","Ergonomics / Thumb Zone","Mappings","Scanning vs Reading"], correct:1,
+   why:"Ergonomics & the Thumb Zone — mobile layouts should map comfortable one-handed reach, especially for frequent primary actions."},
+  {q:"Duolingo sends a push notification saying 'Your streak is about to expire!' In the Hook Model, this is the:",
+   options:["Investment","Variable Reward","Trigger","Action"], correct:2,
+   why:"Trigger — an external nudge (the notification) that cues the user to open the app and begin the loop again."},
+  {q:"After finishing a lesson, Duolingo shows your streak count climbing to 27 days. In the Hook Model, this streak count itself is the:",
+   options:["Trigger","Investment","Variable Reward","Ability"], correct:1,
+   why:"Investment — the accumulated streak is 'stored value' the user has put in, which raises the product's value and sets up tomorrow's trigger."},
+  {q:"Users say they *want* to update their profile photo, and they get reminded regularly — but the upload flow is buried four menus deep, so almost no one does it. Per the Fogg Behavior Model, what's missing?",
+   options:["Motivation","Trigger","Ability","Purpose"], correct:2,
+   why:"Ability — motivation and trigger are already present; the task itself is simply too hard to complete, so B=MAT never converges."},
+  {q:"A volume slider's handle visually moves upward as you drag it, matching the sound getting louder. This is an example of:",
+   options:["Signifiers","Mappings","Feedback","Discoverability"], correct:1,
+   why:"Mappings — the control's spatial motion (up) naturally corresponds to its effect (increased volume)."},
+  {q:"A search bar has a small magnifying-glass icon inside it that hints 'type here to search.' The icon itself is a:",
+   options:["Affordance","Signifier","Mapping","Trigger"], correct:1,
+   why:"Signifier — it's the visual cue communicating where and how to interact; the affordance is the actual ability to type and search."},
+  {q:"When a user hovers a button, it changes color slightly and shows a subtle press animation on click. This interaction principle is:",
+   options:["Feedback","Poka-Yoke","Visual Hierarchy","The CREATE Funnel"], correct:0,
+   why:"Feedback — every action should be met with a clear, immediate signal that it registered."},
+  {q:"A social feed shows greyed-out placeholder boxes shaped like posts while content is being fetched. Which UI Stack state is this?",
+   options:["Empty State","Loading State","Partial State","Error State"], correct:1,
+   why:"Loading State — skeleton screens manage the user's perception of speed while data is fetched."},
+  {q:"A PM wants to validate a risky assumption with the least possible engineering investment before committing to a full build. Which framework fits best?",
+   options:["Double Diamond","Lean UX","Human-Centered Design","UX Strategy Tenets"], correct:1,
+   why:"Lean UX — it prioritizes fast, cheap MVPs and learning over polished deliverables."},
+  {q:"A researcher spends two weeks in the field watching farmers use paper ledgers before designing any screens, looking for unmet 'thoughtless act' needs. This approach is:",
+   options:["Lean UX","Double Diamond","Human-Centered Design","Design Thinking Constraints"], correct:2,
+   why:"Human-Centered Design — it starts with direct observation of real behavior in context, not assumptions or quick prototypes."},
+  {q:"A team brainstorms 40 possible solutions, then narrows down to the top 3 to prototype and test. Which stage pairing of the Double Diamond does this represent?",
+   options:["Discover → Define","Develop → Deliver","Define → Develop","Discover → Deliver"], correct:0,
+   why:"Discover → Define — generating many ideas is divergent (Discover), and narrowing to the top few is convergent (Define)."},
+  {q:"Before opening Figma, a PM drafts the exact wording of every error message and empty state to define the dialogue with the user first. This reflects:",
+   options:["Start With Words","The Squint Test","Scanning vs Reading","UX Strategy Tenets"], correct:0,
+   why:"Start With Words — copy is treated as design material that shapes the experience before any visual layout exists."},
+  {q:"A pricing page uses a large bold headline for the plan name, a medium subhead for the price, and small print for fine details — so the eye instantly knows what matters most. This is:",
+   options:["Scanning vs Reading","Visual Hierarchy","Pattern Recognition","Cognitive Load"], correct:1,
+   why:"Visual Hierarchy — size, weight, and position are used to signal relative importance at a glance."},
+  {q:"A designer blurs their eyes at a mockup to check whether the call-to-action button still stands out from the rest of the page. This technique is called:",
+   options:["The Squint Test","Poka-Yoke","Fitts's Law","Discoverability"], correct:0,
+   why:"The Squint Test — blurring out detail reveals whether the visual hierarchy is strong enough to survive at a glance."},
+  {q:"You're asked to review a signup screen quickly, without running a user test, using an industry-standard 10-point checklist. Which framework do you reach for?",
+   options:["Nielsen's 10 Usability Heuristics","Design Thinking Constraints","Double Diamond Model","UX Strategy Tenets"], correct:0,
+   why:"Nielsen's 10 Usability Heuristics — it's the default checklist for a fast, structured heuristic evaluation without needing real users."},
+  {q:"A form groups City, State, and ZIP tightly together with extra whitespace before the payment section — no labels or dividers needed to show they're related. Which principle explains why this works?",
+   options:["Gestalt Principles (Proximity)","Visual Hierarchy","Von Restorff Effect","Miller's Law"], correct:0,
+   why:"Gestalt's principle of Proximity — elements placed close together are automatically perceived as related, without needing an explicit label."},
+  {q:"A custom dropdown only responds to mouse clicks — keyboard users can't open or select from it at all. Which principle is being violated?",
+   options:["Accessibility — POUR Principles (Operable)","Poka-Yoke","Cognitive Load","Discoverability"], correct:0,
+   why:"Accessibility's Operable principle — every interactive element must be usable without a mouse, including full keyboard navigation."},
+  {q:"A 12-digit account number is displayed as 4 groups of 3 digits instead of one long unbroken string. Which principle explains why this is easier to enter correctly?",
+   options:["Miller's Law (Chunking)","Hick's Law","Cognitive Load (Motor)","Visual Hierarchy"], correct:0,
+   why:"Miller's Law — breaking a long string into small chunks matches the roughly 7-item limit of short-term working memory, making it far easier to hold and enter correctly."},
+  {q:"A camera app shows just a shutter button by default, with manual exposure and ISO controls tucked behind a 'Pro mode' toggle for the minority who want them. Which principle is this?",
+   options:["Progressive Disclosure","Tesler's Law","Hick's Law","Discoverability"], correct:0,
+   why:"Progressive Disclosure — reveal only what most users need by default, and defer advanced functionality behind a clear, secondary entry point."},
+  {q:"On a pricing page, four plans look identical except the recommended one, which has a colored border and a 'Most Popular' badge. Which principle explains why that plan gets noticed first?",
+   options:["Von Restorff Effect (Isolation)","Visual Hierarchy","Gestalt Principles","Aesthetics & Emotion"], correct:0,
+   why:"Von Restorff Effect — an item that visually stands out from an otherwise uniform group is disproportionately more likely to be noticed and remembered."},
+  {q:"A refund process is mostly frustrating, but ends with a clear, warm confirmation message — and users walk away with a better overall impression than the moment-to-moment friction would suggest. Which principle explains this?",
+   options:["Peak-End Rule","The Hook Model","Aesthetics & Emotion","Self-Determination Theory"], correct:0,
+   why:"Peak-End Rule — people judge an experience by its most intense moment and its ending, not by averaging every moment along the way."},
+  {q:"An app adds a branded loading screen within the first 400 milliseconds of a 3-second cold start, so the delay feels intentional rather than broken. Which principle explains the 400ms threshold?",
+   options:["Doherty Threshold","Feedback","The UI Stack (Loading State)","Cognitive Load"], correct:0,
+   why:"Doherty Threshold — responses under roughly 400ms feel instantaneous; beyond that, showing an immediate loading state keeps the system feeling responsive even while real work continues."},
+  {q:"An Android app doesn't respond to the hardware or gesture back button, breaking a deeply ingrained platform expectation. Which principle is being violated?",
+   options:["Platform Conventions (iOS HIG / Material Design)","Ergonomics & the Thumb Zone","Discoverability","Visual Hierarchy"], correct:0,
+   why:"Platform Conventions — users bring expectations from every other app on their OS, and Android's back-button behavior is one of the most deeply ingrained of all."},
+  {q:"Three small icon buttons spaced only 4px apart on a mobile screen keep getting mis-tapped. Which principle explains the fix?",
+   options:["Touch Target Sizing","Fitts's Law","Ergonomics & the Thumb Zone","Poka-Yoke"], correct:0,
+   why:"Touch Target Sizing — mobile platforms define concrete minimum tappable sizes (44×44pt on iOS, 48×48dp on Android) precisely because a finger's contact area is far less precise than a cursor."},
+  {q:"A messaging app queues an unsent message with a visible 'sending…' state that automatically retries and updates to 'sent' once connectivity returns, instead of silently failing. Which principle is this?",
+   options:["Offline & Connectivity Resilience","Feedback","Poka-Yoke","The UI Stack (Error State)"], correct:0,
+   why:"Offline & Connectivity Resilience — mobile networks drop constantly, so actions should be queued and clearly status-tracked rather than silently lost."},
+  {q:"A three-column desktop layout collapses to a single stacked column on mobile web, with the least essential column moved behind a 'more' link rather than just shrunk down. Which principle is this?",
+   options:["Responsive & Adaptive Layout","Ergonomics & the Thumb Zone","Progressive Disclosure","Visual Hierarchy"], correct:0,
+   why:"Responsive & Adaptive Layout — real responsive design re-prioritizes content structure at each breakpoint, not just scales the same layout down proportionally."},
+  {q:"An e-commerce search page updates its URL to reflect the applied filters, so a shared link opens directly to the same filtered results. Which principle is this?",
+   options:["Browser Navigation & URL Predictability","Discoverability","Feedback","Responsive & Adaptive Layout"], correct:0,
+   why:"Browser Navigation & URL Predictability — a predictable URL structure lets users bookmark, share, and return to exactly the state they left, treating the URL as part of the UI."},
+];
+
+let state = {
+  view: "library",
+  search: "",
+  activeCat: "all",
+  activePlatform: "all",
+  squint: false,
+  openPrincipleIdx: null,
+  quizOrder: [],
+  quizIndex: 0,
+  quizScore: 0,
+  quizAnswered: null,
+  quizHistory: [],
+  quizDone: false,
+};
+
+function shuffledIndices(n){
+  const arr = Array.from({length:n}, (_,i)=>i);
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function resetQuiz(){
+  state.quizOrder = shuffledIndices(SCENARIOS.length);
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  state.quizAnswered = null;
+  state.quizHistory = [];
+  state.quizDone = false;
+}
+resetQuiz();
+
+function catCounts(platformFilter){
+  const c = {};
+  PRINCIPLES.filter(p=> platformFilter==='all' || p.platform===platformFilter || p.platform==='both').forEach(p=>{ c[p.cat] = (c[p.cat]||0)+1; });
+  return c;
+}
+function platformCounts(catFilter){
+  const c = {all:0, web:0, mobile:0};
+  PRINCIPLES.filter(p=> catFilter==='all' || p.cat===catFilter).forEach(p=>{
+    c.all++;
+    if(p.platform==='web' || p.platform==='both') c.web++;
+    if(p.platform==='mobile' || p.platform==='both') c.mobile++;
+  });
+  return c;
+}
+function renderLibrary(){
+  const counts = catCounts(state.activePlatform);
+  const catPills = ['<button class="pill" data-cat="all" data-active="'+(state.activeCat==='all')+'" onclick="setCat(\'all\')">✨ All <span class="count">'+PRINCIPLES.filter(p=>state.activePlatform==='all'||p.platform===state.activePlatform||p.platform==='both').length+'</span></button>']
+    .concat(Object.keys(CATS).map(c=>{
+      const active = state.activeCat===c;
+      return `<button class="pill" data-cat="${c}" data-active="${active}" onclick="setCat('${c}')">${CATS[c].icon} ${CATS[c].label} <span class="count">${counts[c]||0}</span></button>`;
+    })).join('');
+
+  const platCounts = platformCounts(state.activeCat);
+  const platSegments = ['all','web','mobile'].map(pk=>{
+    const active = state.activePlatform===pk;
+    const label = pk==='all' ? 'All' : PLATFORMS[pk].label;
+    const icon = pk==='all' ? '🔁' : PLATFORMS[pk].icon;
+    const count = pk==='all' ? platCounts.all : platCounts[pk];
+    return `<button class="segment" data-active="${active}" onclick="setPlatform('${pk}')">${icon} ${label} <span class="count">${count}</span></button>`;
+  }).join('');
+
+  const filtered = PRINCIPLES.filter(p=>{
+    const matchesCat = state.activeCat==='all' || p.cat===state.activeCat;
+    const matchesPlatform = state.activePlatform==='all' || p.platform===state.activePlatform || p.platform==='both';
+    const q = state.search.trim().toLowerCase();
+    const matchesSearch = !q || p.name.toLowerCase().includes(q) || p.hook.toLowerCase().includes(q) || p.def.toLowerCase().includes(q);
+    return matchesCat && matchesPlatform && matchesSearch;
+  });
+
+  const filtersActive = state.activeCat!=='all' || state.activePlatform!=='all' || state.search.trim()!=='';
+  const activeLabelParts = [];
+  if(state.activePlatform!=='all') activeLabelParts.push(PLATFORMS[state.activePlatform].icon+' '+PLATFORMS[state.activePlatform].label);
+  if(state.activeCat!=='all') activeLabelParts.push(CATS[state.activeCat].icon+' '+CATS[state.activeCat].label);
+  const summaryText = activeLabelParts.length ? `${filtered.length} of ${PRINCIPLES.length} principles — ${activeLabelParts.join(' + ')}` : `${filtered.length} of ${PRINCIPLES.length} principles`;
+
+  const cards = filtered.map(p=>{
+    const realIdx = PRINCIPLES.indexOf(p);
+    const platInfo = PLATFORMS[p.platform];
+    return `
+    <div class="card" data-cat="${p.cat}" tabindex="0" role="button" aria-label="Open details for ${p.name}"
+         onclick="openPrinciple(${realIdx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); openPrinciple(${realIdx});}">
+      <div class="cat-row">
+        <span class="cat-tag">${CATS[p.cat].icon} ${CATS[p.cat].label}</span>
+        <span class="platform-badge">${platInfo.icon} ${platInfo.label}</span>
+      </div>
+      <h3>${p.name}</h3>
+      <p class="hook">${p.hook}</p>
+      <span class="explore-row">Explore
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="lib-controls">
+      <div class="search-wrap">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8886a3" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="searchInput" type="text" placeholder="Search principles, e.g. 'Fitts' or 'Hook Model'..." value="${state.search}" oninput="setSearch(this.value)"/>
+      </div>
+      ${filtersActive ? `<button class="reset-chip" onclick="resetFilters()">✕ Reset filters</button>` : ''}
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-block-label">📱 Platform <span class="hint">— pick one, applies to devices this principle is relevant for</span></div>
+      <div class="segmented">${platSegments}</div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-block-label">🗂️ Category <span class="hint">— filters the topic area below</span></div>
+      <div class="lib-controls pill-row">${catPills}</div>
+    </div>
+
+    <p class="squint-hint">💡 Toggle Squint Test (top right) to feel the Squint Test principle live.</p>
+    <p class="result-count">${summaryText}</p>
+    <div class="grid">${cards || `<div class="empty-state">No principles match your filters.<br><button class="reset-chip" style="margin:10px 0 0;" onclick="resetFilters()">✕ Reset filters</button></div>`}</div>
+  `;
+}
+function setCat(c){ state.activeCat = c; render(); }
+function setPlatform(pk){ state.activePlatform = pk; render(); }
+function resetFilters(){ state.activeCat='all'; state.activePlatform='all'; state.search=''; render(); }
+function setSearch(v){ state.search = v; render(true); }
+
+function openPrinciple(idx){ state.openPrincipleIdx = idx; renderModal(); }
+function closePrinciple(){ state.openPrincipleIdx = null; renderModal(); }
+
+function renderModal(){
+  const root = document.getElementById('modalRoot');
+  if(state.openPrincipleIdx===null){ root.innerHTML=''; return; }
+  const p = PRINCIPLES[state.openPrincipleIdx];
+  const examples = p.example.map(e=>`<li>${e}</li>`).join('');
+  const points = p.points.map(pt=>{
+    if(pt.term){
+      return `<li class="point-term"><span class="point-term-label">${pt.term}</span>${pt.text}</li>`;
+    }
+    const isIntro = pt.text.trim().endsWith(':');
+    return `<li class="${isIntro ? 'point-intro' : 'point-plain'}">${pt.text}</li>`;
+  }).join('');
+  root.innerHTML = `
+    <div class="modal-overlay" onclick="if(event.target===this) closePrinciple();">
+      <div class="modal" data-cat="${p.cat}" role="dialog" aria-modal="true" aria-label="${p.name} details">
+        <div class="modal-top">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="cat-tag">${CATS[p.cat].icon} ${CATS[p.cat].label}</span>
+            <span class="platform-badge">${PLATFORMS[p.platform].icon} ${PLATFORMS[p.platform].label}</span>
+          </div>
+          <button class="modal-close" onclick="closePrinciple()" aria-label="Close">✕</button>
+        </div>
+        <h2>${p.name}</h2>
+        <p class="modal-hook">${p.hook}</p>
+
+        <div class="section-label">📖 What it means</div>
+        <ul class="points-list">${points}</ul>
+
+        <div class="section-label">🤔 Why it matters</div>
+        <p class="body-text">${p.why}</p>
+
+        <div class="two-col">
+          <div class="two-col-item">
+            <div class="section-label small">⏰ When to apply it</div>
+            <p class="body-text small">${p.when}</p>
+          </div>
+          <div class="two-col-item">
+            <div class="section-label small">🛠️ How to apply it</div>
+            <p class="body-text small">${p.how}</p>
+          </div>
+        </div>
+
+        <div class="section-label">🧪 In practice</div>
+        <ul class="example-list">${examples}</ul>
+
+        ${p.watch ? `
+        <div class="section-label">⚠️ Watch out for</div>
+        <div class="watch-box"><strong>Common pitfall:</strong> ${p.watch}</div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && state.openPrincipleIdx !== null){ closePrinciple(); }
+});
+
+function renderScenarios(){
+  if(state.quizDone){
+    const byCat = {};
+    state.quizHistory.forEach(h=>{
+      byCat[h.cat] = byCat[h.cat] || {correct:0,total:0};
+      byCat[h.cat].total++;
+      if(h.correct) byCat[h.cat].correct++;
+    });
+    const breakdown = Object.keys(byCat).map(c=>`
+      <div class="bd-item">
+        <div style="font-size:12px;color:var(--ink-soft);font-weight:600;">${CATS[c].icon} ${CATS[c].label}</div>
+        <div class="n">${byCat[c].correct} / ${byCat[c].total}</div>
+      </div>`).join('');
+    const missed = state.quizHistory.filter(h=>!h.correct).map(h=>`
+      <div class="missed-item"><strong>${h.q}</strong><br/>→ Correct answer: ${h.correctLabel}. ${h.why}</div>`).join('');
+    return `
+      <div class="results">
+        <h2>🎉 Practice complete</h2>
+        <div class="big-score">${state.quizScore} / ${SCENARIOS.length}</div>
+        <p style="color:var(--ink-soft);">Here's how you did across each category:</p>
+        <div class="breakdown">${breakdown}</div>
+        <button class="restart-btn" onclick="restartQuiz()">Practice again (new shuffle)</button>
+        ${missed.length ? `<div class="missed-list"><h3 style="font-size:16px;">Review what you missed</h3>${missed}</div>` : `<p style="margin-top:20px;font-weight:600;">Perfect score — nice work! 🔥</p>`}
+      </div>
+    `;
+  }
+
+  const sIdx = state.quizOrder[state.quizIndex];
+  const s = SCENARIOS[sIdx];
+  const pct = Math.round((state.quizIndex/SCENARIOS.length)*100);
+
+  const options = s.options.map((opt, i)=>{
+    let cls = "option-btn";
+    let disabled = "";
+    if(state.quizAnswered !== null){
+      disabled = "disabled";
+      if(i===s.correct) cls += " reveal-correct";
+      else if(i===state.quizAnswered) cls += " incorrect";
+    }
+    return `<button class="${cls}" ${disabled} onclick="answerQuiz(${i})">${opt}</button>`;
+  }).join('');
+
+  const feedback = state.quizAnswered !== null ? `
+    <div class="feedback-box">
+      <strong>${state.quizAnswered===s.correct ? "✅ Correct — " : "❌ Not quite — "}</strong>${s.why}
+    </div>
+    <button class="next-btn" onclick="nextQuiz()">${state.quizIndex===SCENARIOS.length-1 ? "See results" : "Next scenario →"}</button>
+  ` : '';
+
+  return `
+    <div class="scenario-wrap">
+      <div class="progress-row">
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <span class="score-chip">${state.quizIndex+1} / ${SCENARIOS.length} · score ${state.quizScore}</span>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-eyebrow">Scenario</div>
+        <p class="scenario-text">${s.q}</p>
+        <div class="options">${options}</div>
+        ${feedback}
+      </div>
+    </div>
+  `;
+}
+function answerQuiz(i){
+  if(state.quizAnswered !== null) return;
+  const sIdx = state.quizOrder[state.quizIndex];
+  const s = SCENARIOS[sIdx];
+  const correct = i === s.correct;
+  state.quizAnswered = i;
+  if(correct) state.quizScore++;
+  state.quizHistory.push({
+    q: s.q, why: s.why, correct,
+    correctLabel: s.options[s.correct],
+    cat: guessCatFromOption(s.options[s.correct])
+  });
+  render();
+}
+function guessCatFromOption(optionLabel){
+  const p = PRINCIPLES.find(p=>p.name.toLowerCase().includes(optionLabel.toLowerCase()) || optionLabel.toLowerCase().includes(p.name.split(' ')[0].toLowerCase()));
+  return p ? p.cat : 'strat';
+}
+function nextQuiz(){
+  if(state.quizIndex === SCENARIOS.length-1){
+    state.quizDone = true;
+  } else {
+    state.quizIndex++;
+    state.quizAnswered = null;
+  }
+  render();
+}
+function restartQuiz(){ resetQuiz(); render(); }
+
+function render(keepFocus){
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.view === state.view);
+  });
+  document.body.classList.toggle('squinting', state.squint);
+  const main = document.getElementById('main');
+  main.innerHTML = state.view === 'library' ? renderLibrary() : renderScenarios();
+  if(keepFocus){
+    const inp = document.getElementById('searchInput');
+    if(inp){ inp.focus(); inp.selectionStart = inp.selectionEnd = inp.value.length; }
+  }
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{ state.view = t.dataset.view; state.openPrincipleIdx=null; renderModal(); render(); });
+});
+
+const squintBtn = document.getElementById('squintBtn');
+squintBtn.addEventListener('click', ()=>{
+  state.squint = !state.squint;
+  squintBtn.classList.toggle('on', state.squint);
+  document.getElementById('squintLabel').textContent = state.squint ? "Squinting..." : "Squint Test";
+  document.getElementById('squintIcon').textContent = state.squint ? "🙈" : "👀";
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
